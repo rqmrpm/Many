@@ -3,156 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NetInsight Security</title>
+    <title id="page-title">NetInsight Pro - الحماية الشاملة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gradient-primary: linear-gradient(135deg, #2563eb, #1d4ed8);
+            --gradient-success: linear-gradient(135deg, #10b981, #059669);
+            --gradient-danger: linear-gradient(135deg, #ef4444, #dc2626);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.2);
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Noto Sans Arabic', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', 'Noto Sans Arabic', Tahoma, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
         
         body {
-            background-color: #000000;
-            color: #f5f5f7;
+            background: var(--light);
+            color: var(--dark);
             max-width: 500px;
             margin: 0 auto;
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-            border-radius: 0;
-            touch-action: pan-y;
+            transition: all 0.3s;
         }
         
-        /* شريط حالة Android معدل */
+        /* شريط الحالة */
         .status-bar {
-            height: 24px;
-            background-color: #000000;
+            height: 44px;
+            background: var(--dark);
+            color: white;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             padding: 0 16px;
             font-size: 14px;
             font-weight: 600;
-            color: #f5f5f7;
             position: sticky;
             top: 0;
-            z-index: 100;
-            border-bottom: 1px solid #38383a;
+            z-index: 1000;
         }
         
-        /* الهيدر المعدل */
-        .app-header {
-            padding: 16px;
+        .language-switcher {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            background-color: #1c1c1e;
-            border-bottom: 1px solid #38383a;
+            gap: 6px;
+            transition: all 0.3s;
+        }
+        
+        .language-switcher:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        /* الهيدر */
+        .app-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 24px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .app-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #10b981, #3b82f6, #ef4444);
+            animation: rainbow 3s infinite;
+        }
+        
+        @keyframes rainbow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
         
         .app-title {
-            font-size: 22px;
-            font-weight: 700;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            gap: 12px;
         }
         
-        .app-title i {
-            color: #0a84ff;
+        .app-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+            max-width: 80%;
+            margin: 0 auto;
         }
         
-        /* المحتوى الرئيسي مع تأثير الانزلاق */
-        .app-content {
-            padding: 0;
-            padding-bottom: 20px;
-            width: 200%;
+        /* التنقل */
+        .nav-tabs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            background: white;
+            border-bottom: 2px solid #e2e8f0;
+            position: sticky;
+            top: 44px;
+            z-index: 999;
+            box-shadow: var(--shadow);
+        }
+        
+        .nav-tab {
+            padding: 18px 10px;
+            background: none;
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
             display: flex;
-            transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
-        .content-page {
-            width: 50%;
-            padding: 16px;
+        .nav-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: linear-gradient(to top, rgba(37, 99, 235, 0.05), transparent);
         }
         
-        /* بطاقات المعلومات */
-        .info-section {
-            background-color: #1c1c1e;
-            border-radius: 16px;
+        /* المحتوى */
+        .tab-content {
+            display: none;
             padding: 20px;
-            margin-bottom: 16px;
-            border: 1px solid #38383a;
+            animation: fadeIn 0.4s;
         }
         
-        .section-title {
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* البطاقات */
+        .info-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .card-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 20px;
-            font-size: 18px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+        
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .card-title i {
+            color: var(--primary);
+        }
+        
+        .security-badge {
+            background: var(--gradient-success);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
         
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 52px;
-            height: 28px;
-        }
-        
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #38383a;
-            transition: .3s;
-            border-radius: 34px;
-        }
-        
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .3s;
-            border-radius: 50%;
-        }
-        
-        input:checked + .toggle-slider {
-            background-color: #0a84ff;
-        }
-        
-        input:checked + .toggle-slider:before {
-            transform: translateX(24px);
+        /* عناصر البيانات */
+        .data-grid {
+            display: grid;
+            gap: 16px;
         }
         
         .data-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             padding: 14px 0;
-            border-bottom: 1px solid #38383a;
+            border-bottom: 1px solid #f1f5f9;
         }
         
         .data-item:last-child {
             border-bottom: none;
+            padding-bottom: 0;
         }
         
         .data-label {
@@ -160,200 +241,545 @@
             align-items: center;
             gap: 12px;
             font-size: 15px;
-        }
-        
-        .data-value {
-            font-size: 14px;
-            color: #8e8e93;
-            max-width: 50%;
-            text-align: left;
-            word-break: break-all;
+            font-weight: 500;
         }
         
         .data-icon {
             width: 36px;
             height: 36px;
-            border-radius: 8px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
-            background-color: rgba(10, 132, 255, 0.1);
-            color: #0a84ff;
+            font-size: 16px;
+            background: #f1f5f9;
+            color: var(--primary);
         }
         
-        .data-icon.danger {
-            background-color: rgba(255, 59, 48, 0.1);
-            color: #ff3b30;
+        .data-value {
+            font-size: 14px;
+            color: var(--dark);
+            font-weight: 600;
+            max-width: 60%;
+            text-align: left;
+            word-break: break-word;
         }
         
-        .data-icon.warning {
-            background-color: rgba(255, 149, 0, 0.1);
-            color: #ff9500;
+        .data-value.danger {
+            color: var(--danger);
         }
         
-        .data-icon.success {
-            background-color: rgba(52, 199, 89, 0.1);
-            color: #34c759;
+        .data-value.warning {
+            color: var(--warning);
         }
         
-        /* صفحة الدفع */
-        .payment-page {
-            background-color: #1c1c1e;
-            min-height: calc(100vh - 100px);
+        .data-value.success {
+            color: var(--secondary);
         }
         
-        .payment-card {
-            background-color: #2c2c2e;
+        /* أزرار الدفع */
+        .payment-section {
+            background: white;
             border-radius: 16px;
             padding: 24px;
-            margin: 16px;
-            text-align: center;
+            margin: 30px 0;
+            box-shadow: var(--shadow-lg);
+            border: 2px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .payment-section::before {
+            content: '⚡ عرض خاص ⚡';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--gradient-danger);
+            color: white;
+            padding: 8px 20px;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 0 0 0 16px;
         }
         
         .payment-title {
-            font-size: 22px;
-            font-weight: 700;
+            font-size: 24px;
+            font-weight: 800;
+            text-align: center;
             margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
+            color: var(--dark);
         }
         
-        .payment-desc {
-            color: #8e8e93;
+        .payment-subtitle {
+            text-align: center;
+            color: var(--gray);
             margin-bottom: 24px;
             font-size: 15px;
             line-height: 1.5;
         }
         
         .payment-amount {
-            background-color: #000000;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-            border: 1px solid #38383a;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px dashed #f59e0b;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
         }
         
         .amount-label {
-            font-size: 14px;
-            color: #8e8e93;
+            font-size: 16px;
+            color: #92400e;
             margin-bottom: 8px;
         }
         
         .amount-value {
-            font-size: 36px;
-            font-weight: 700;
-            color: #0a84ff;
+            font-size: 48px;
+            font-weight: 900;
+            color: #92400e;
+            line-height: 1;
         }
         
-        .payment-methods {
+        .amount-note {
+            font-size: 14px;
+            color: #92400e;
+            opacity: 0.8;
+            margin-top: 8px;
+        }
+        
+        .payment-buttons {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-top: 20px;
+            gap: 16px;
         }
         
         .payment-btn {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            background-color: #000000;
-            border: 1px solid #38383a;
-            padding: 20px;
-            border-radius: 12px;
+            justify-content: center;
+            gap: 12px;
+            background: var(--gradient-primary);
             color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
             text-decoration: none;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.2s;
+            box-shadow: 0 6px 0 var(--primary-dark);
         }
         
         .payment-btn:hover {
-            background-color: #0a84ff;
-            border-color: #0a84ff;
+            transform: translateY(-3px);
+            box-shadow: 0 9px 0 var(--primary-dark);
         }
         
-        .payment-btn i {
+        .payment-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 3px 0 var(--primary-dark);
+        }
+        
+        .payment-btn.secondary {
+            background: var(--gradient-success);
+            box-shadow: 0 6px 0 #059669;
+        }
+        
+        .payment-btn.secondary:hover {
+            box-shadow: 0 9px 0 #059669;
+        }
+        
+        .payment-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 30px;
+        }
+        
+        .feature-item {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .feature-icon {
             font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 8px;
         }
         
-        .payment-info {
-            color: #8e8e93;
+        .feature-text {
+            font-size: 13px;
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        /* صفحة الميزات المدفوعة */
+        .premium-features {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .premium-card {
+            background: white;
+            border-radius: 16px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .premium-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .premium-header {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .premium-body {
+            padding: 20px;
+        }
+        
+        .feature-list {
+            list-style: none;
+        }
+        
+        .feature-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-list li i {
+            color: var(--secondary);
+        }
+        
+        /* إحصائيات التحفيز */
+        .stats-bar {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        
+        .stat-label {
             font-size: 12px;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #38383a;
+            color: var(--gray);
         }
         
-        /* مؤشر الصفحات */
-        .page-indicator {
+        /* التنبيهات */
+        .alert {
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.5s;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .alert-danger {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            border: 2px solid #fca5a5;
+            color: #7f1d1d;
+        }
+        
+        .alert-warning {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #fcd34d;
+            color: #92400e;
+        }
+        
+        /* الفوتر */
+        .app-footer {
+            background: var(--dark);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .footer-links {
             display: flex;
             justify-content: center;
-            gap: 8px;
-            margin-top: 20px;
+            gap: 24px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         
-        .page-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: #38383a;
-            transition: background-color 0.3s;
+        .footer-link {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
         }
         
-        .page-dot.active {
-            background-color: #0a84ff;
-            width: 24px;
-            border-radius: 4px;
+        .footer-link:hover {
+            color: white;
         }
         
-        /* شريط التمرير للانتقال بين الصفحات */
-        .swipe-hint {
+        .copyright {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-top: 10px;
+        }
+        
+        /* تنسيقات إضافية */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .badge-success {
+            background: var(--gradient-success);
+            color: white;
+        }
+        
+        .badge-danger {
+            background: var(--gradient-danger);
+            color: white;
+        }
+        
+        .badge-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+        
+        .hint {
             text-align: center;
-            color: #8e8e93;
+            color: var(--gray);
             font-size: 14px;
             margin-top: 20px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px dashed #cbd5e1;
+        }
+        
+        .swipe-hint {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            margin-top: 20px;
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        /* متجاوب */
+        @media (max-width: 480px) {
+            .app-title { font-size: 24px; }
+            .payment-title { font-size: 20px; }
+            .amount-value { font-size: 36px; }
+            .payment-btn { font-size: 16px; padding: 18px; }
+            .nav-tab { font-size: 14px; padding: 16px 8px; }
+            .feature-features { grid-template-columns: 1fr; }
+            .payment-features { grid-template-columns: 1fr; }
+        }
+        
+        /* تباين عالي للأزرار */
+        .cta-button {
+            background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+            box-shadow: 0 6px 0 #7f1d1d !important;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 6px 0 #7f1d1d, 0 0 0 0 rgba(220, 38, 38, 0.7); }
+            70% { box-shadow: 0 6px 0 #7f1d1d, 0 0 0 10px rgba(220, 38, 38, 0); }
+            100% { box-shadow: 0 6px 0 #7f1d1d, 0 0 0 0 rgba(220, 38, 38, 0); }
+        }
+        
+        /* التحسينات النفسية */
+        .urgency-banner {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            color: #92400e;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            animation: shake 0.5s infinite alternate;
+        }
+        
+        @keyframes shake {
+            from { transform: translateX(-2px); }
+            to { transform: translateX(2px); }
+        }
+        
+        .testimonial {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            color: var(--dark);
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        
+        .testimonial-author {
+            font-weight: 700;
+            color: var(--primary);
+            text-align: left;
+        }
+        
+        /* التحسينات للترجمة */
+        [dir="ltr"] {
+            text-align: left;
+        }
+        
+        [dir="ltr"] .data-value {
+            text-align: right;
+        }
+        
+        [dir="ltr"] .swipe-hint i {
+            transform: rotate(180deg);
         }
     </style>
 </head>
 <body>
-    <!-- شريط حالة Android -->
+    <!-- شريط الحالة -->
     <div class="status-bar">
-        <div>NetInsight</div>
-        <div>11:30</div>
+        <div id="current-time">٠١:٠٢ ص</div>
+        <div>NetInsight Pro</div>
+        <button class="language-switcher" id="language-switcher">
+            <i class="fas fa-globe"></i>
+            <span id="language-text">English</span>
+        </button>
     </div>
     
     <!-- الهيدر -->
     <header class="app-header">
         <div class="app-title">
             <i class="fas fa-shield-alt"></i>
-            <span>حماية البيانات</span>
+            <span id="main-title">NetInsight Pro</span>
         </div>
+        <p class="app-subtitle" id="main-subtitle">حماية شاملة لبياناتك وتصفح آمن</p>
     </header>
     
-    <!-- المحتوى الرئيسي مع إمكانية الانزلاق -->
-    <div class="app-content" id="appContent">
-        <!-- الصفحة 1: معلومات الجهاز -->
-        <div class="content-page">
-            <div class="info-section">
-                <div class="section-title">
-                    <span>معلومات جهازك</span>
+    <!-- التنقل -->
+    <div class="nav-tabs">
+        <button class="nav-tab active" data-tab="scan">
+            <i class="fas fa-search"></i>
+            <span id="tab-scan">فحص الجهاز</span>
+        </button>
+        <button class="nav-tab" data-tab="premium">
+            <i class="fas fa-crown"></i>
+            <span id="tab-premium">الميزات المدفوعة</span>
+        </button>
+        <button class="nav-tab" data-tab="payment">
+            <i class="fas fa-bolt"></i>
+            <span id="tab-payment">الترقية الآن</span>
+        </button>
+    </div>
+    
+    <!-- تنبيه الاستعجال -->
+    <div class="urgency-banner" id="urgency-banner">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span id="urgency-text">⚠️ عرض محدود! 87% خصم - ينتهي قريباً</span>
+    </div>
+    
+    <!-- إحصائيات التحفيز -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-value" id="stat-protected">342,158+</div>
+            <div class="stat-label" id="stat-protected-label">مستخدم محمي</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">10%</div>
+            <div class="stat-label" id="stat-conversion-label">معدل التحويل</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="stat-threats">12,847</div>
+            <div class="stat-label" id="stat-threats-label">تهديد تم منعه</div>
+        </div>
+    </div>
+    
+    <!-- تبويب فحص الجهاز -->
+    <div id="scan-tab" class="tab-content active">
+        <!-- تنبيه خطر -->
+        <div class="alert alert-danger">
+            <i class="fas fa-skull-crossbones"></i>
+            <div>
+                <strong id="alert-title">تحذير أمني شديد!</strong>
+                <span id="alert-text">تم اكتشاف 12 ثغرة أمنية في نظامك. جهازك غير محمي!</span>
+            </div>
+        </div>
+        
+        <!-- بطاقة معلومات الجهاز -->
+        <div class="info-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-desktop"></i>
+                    <span id="device-info-title">معلومات جهازك</span>
                 </div>
-                
+                <div class="security-badge">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span id="security-status">غير آمن</span>
+                </div>
+            </div>
+            
+            <div class="data-grid">
                 <div class="data-item">
                     <div class="data-label">
                         <div class="data-icon">
-                            <i class="fas fa-desktop"></i>
+                            <i class="fab fa-linux"></i>
                         </div>
-                        <span>نظام التشغيل</span>
+                        <span id="os-label">نظام التشغيل</span>
                     </div>
-                    <div class="data-value" id="osInfo">جاري التحميل...</div>
+                    <div class="data-value" id="os-value">Linux armv81</div>
                 </div>
                 
                 <div class="data-item">
@@ -361,9 +787,9 @@
                         <div class="data-icon">
                             <i class="fas fa-globe"></i>
                         </div>
-                        <span>المتصفح</span>
+                        <span id="browser-label">المتصفح</span>
                     </div>
-                    <div class="data-value" id="browserInfo">جاري التحميل...</div>
+                    <div class="data-value" id="browser-value">Mozilla/5.0 (Linux; Android 10; K)</div>
                 </div>
                 
                 <div class="data-item">
@@ -371,9 +797,9 @@
                         <div class="data-icon">
                             <i class="fas fa-expand"></i>
                         </div>
-                        <span>دقة الشاشة</span>
+                        <span id="screen-label">دقة الشاشة</span>
                     </div>
-                    <div class="data-value" id="screenInfo">جاري التحميل...</div>
+                    <div class="data-value" id="screen-value">360 × 820 (2x)</div>
                 </div>
                 
                 <div class="data-item">
@@ -381,79 +807,97 @@
                         <div class="data-icon">
                             <i class="fas fa-language"></i>
                         </div>
-                        <span>اللغة</span>
+                        <span id="language-label">اللغة</span>
                     </div>
-                    <div class="data-value" id="languageInfo">جاري التحميل...</div>
+                    <div class="data-value" id="language-value">ar-EG</div>
                 </div>
             </div>
+        </div>
+        
+        <!-- بطاقة البصمة الرقمية -->
+        <div class="info-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-fingerprint"></i>
+                    <span id="fingerprint-title">البصمة الرقمية</span>
+                </div>
+                <div class="badge badge-danger" id="fingerprint-badge">مكشوف</div>
+            </div>
             
-            <div class="info-section">
-                <div class="section-title">
-                    <span>البصمة الرقمية</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="fingerprintToggle" checked>
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-                
-                <div class="data-item">
-                    <div class="data-label">
-                        <div class="data-icon danger">
-                            <i class="fas fa-fingerprint"></i>
-                        </div>
-                        <span>بصمة المتصفح</span>
-                    </div>
-                    <div class="data-value" id="browserFingerprint">جاري التحميل...</div>
-                </div>
-                
-                <div class="data-item">
-                    <div class="data-label">
-                        <div class="data-icon danger">
-                            <i class="fas fa-network-wired"></i>
-                        </div>
-                        <span>عنوان IP</span>
-                    </div>
-                    <div class="data-value" id="ipAddress">جاري التحميل...</div>
-                </div>
-                
-                <div class="data-item">
-                    <div class="data-label">
-                        <div class="data-icon warning">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <span>الموقع التقريبي</span>
-                    </div>
-                    <div class="data-value" id="locationInfo">جاري التحميل...</div>
-                </div>
-                
+            <div class="data-grid">
                 <div class="data-item">
                     <div class="data-label">
                         <div class="data-icon">
                             <i class="fas fa-id-card"></i>
                         </div>
-                        <span>معرف الجهاز</span>
+                        <span id="browser-fingerprint-label">بصمة المتصفح</span>
                     </div>
-                    <div class="data-value" id="deviceId">جاري التحميل...</div>
-                </div>
-            </div>
-            
-            <div class="info-section">
-                <div class="section-title">
-                    <span>بيانات الاتصال</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="networkToggle" checked>
-                        <span class="toggle-slider"></span>
-                    </label>
+                    <div class="data-value danger" id="browser-fingerprint-value">-6BC96C27</div>
                 </div>
                 
                 <div class="data-item">
                     <div class="data-label">
                         <div class="data-icon">
-                            <i class="fas fa-wifi"></i>
+                            <i class="fas fa-network-wired"></i>
                         </div>
-                        <span>نوع الاتصال</span>
+                        <span id="ip-label">عنوان IP</span>
                     </div>
-                    <div class="data-value" id="connectionType">جاري التحميل...</div>
+                    <div class="data-value danger" id="ip-value">51.89.221.154</div>
+                </div>
+                
+                <div class="data-item">
+                    <div class="data-label">
+                        <div class="data-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <span id="location-label">الموقع التقريبي</span>
+                    </div>
+                    <div class="data-value warning" id="location-value">London, United Kingdom</div>
+                </div>
+                
+                <div class="data-item">
+                    <div class="data-label">
+                        <div class="data-icon">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <span id="device-id-label">معرف الجهاز</span>
+                    </div>
+                    <div class="data-value danger" id="device-id-value">DEV-6223A86C</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- بطاقة بيانات الاتصال -->
+        <div class="info-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-wifi"></i>
+                    <span id="connection-title">بيانات الاتصال</span>
+                </div>
+                <div class="badge badge-warning" id="connection-badge">غير مشفر</div>
+            </div>
+            
+            <div class="data-grid">
+                <div class="data-item">
+                    <div class="data-label">
+                        <div class="data-icon">
+                            <i class="fas fa-satellite-dish"></i>
+                        </div>
+                        <span id="vpn-label">اتصال VPN</span>
+                    </div>
+                    <div class="data-value danger" id="vpn-value">
+                        <i class="fas fa-times-circle"></i> غير متصل
+                    </div>
+                </div>
+                
+                <div class="data-item">
+                    <div class="data-label">
+                        <div class="data-icon">
+                            <i class="fas fa-broadcast-tower"></i>
+                        </div>
+                        <span id="connection-type-label">نوع الاتصال</span>
+                    </div>
+                    <div class="data-value" id="connection-type-value">4g</div>
                 </div>
                 
                 <div class="data-item">
@@ -461,9 +905,9 @@
                         <div class="data-icon">
                             <i class="fas fa-tachometer-alt"></i>
                         </div>
-                        <span>سرعة الإنترنت</span>
+                        <span id="speed-label">سرعة الإنترنت</span>
                     </div>
-                    <div class="data-value" id="internetSpeed">جاري التحميل...</div>
+                    <div class="data-value warning" id="speed-value">0.9 Mbps</div>
                 </div>
                 
                 <div class="data-item">
@@ -471,392 +915,752 @@
                         <div class="data-icon">
                             <i class="fas fa-clock"></i>
                         </div>
-                        <span>المنطقة الزمنية</span>
+                        <span id="timezone-label">المنطقة الزمنية</span>
                     </div>
-                    <div class="data-value" id="timezone">جاري التحميل...</div>
+                    <div class="data-value" id="timezone-value">Asia/Damascus</div>
                 </div>
-            </div>
-            
-            <div class="swipe-hint">
-                <i class="fas fa-arrow-left"></i>
-                اسحب لليسار للانتقال إلى صفحة الدفع
             </div>
         </div>
         
-        <!-- الصفحة 2: الدفع -->
-        <div class="content-page payment-page">
-            <div class="payment-card">
-                <div class="payment-title">
-                    <i class="fas fa-crown"></i>
-                    <span>الترقية إلى Pro</span>
-                </div>
-                
-                <div class="payment-desc">
-                    تفعيل الحماية الكاملة وإيقاف جمع بياناتك
-                </div>
-                
-                <div class="payment-amount">
-                    <div class="amount-label">المبلغ المطلوب</div>
-                    <div class="amount-value">$1</div>
-                </div>
-                
-                <div class="payment-methods">
-                    <!-- زر الدفع الأول -->
-                    <a href="https://nowpayments.io/payment/?iid=4317957448&source=button" target="_blank" rel="noreferrer noopener" class="payment-btn">
-                        <div>
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <div>الدفع السريع عبر NOWPayments</div>
-                        <div>
-                            <i class="fas fa-arrow-left"></i>
-                        </div>
-                    </a>
-                    
-                    <!-- زر الدفع الثاني -->
-                    <a href="https://nowpayments.io/payment/?iid=4909021269&source=button" target="_blank" rel="noreferrer noopener" class="payment-btn">
-                        <div>
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <div>حماية متقدمة</div>
-                        <div>
-                            <i class="fas fa-arrow-left"></i>
-                        </div>
-                    </a>
-                    
-                    <!-- أداة الدفع المضمنة -->
-                    <div class="payment-btn" onclick="showEmbeddedPayment()">
-                        <div>
-                            <i class="fas fa-credit-card"></i>
-                        </div>
-                        <div>بوابة الدفع المدمجة</div>
-                        <div>
-                            <i class="fas fa-arrow-left"></i>
-                        </div>
+        <!-- شهادة مستخدم -->
+        <div class="testimonial">
+            <p class="testimonial-text" id="testimonial-text">
+                "NetInsight Pro أنقذ بياناتي من الاختراق! بعد الترقية، جميع ثغراتي الأمنية أُصلحت تلقائياً. أنصح به بشدة!"
+            </p>
+            <p class="testimonial-author" id="testimonial-author">- أحمد السيد، محلل أمني</p>
+        </div>
+        
+        <div class="swipe-hint">
+            <i class="fas fa-arrow-left"></i>
+            <span id="swipe-hint">اسحب لليسار لرؤية الميزات المدفوعة</span>
+        </div>
+    </div>
+    
+    <!-- تبويب الميزات المدفوعة -->
+    <div id="premium-tab" class="tab-content">
+        <div class="alert alert-warning">
+            <i class="fas fa-crown"></i>
+            <div>
+                <strong id="premium-alert-title">ميزات حصرية للمستخدمين المميزين</strong>
+                <span id="premium-alert-text">فقط $1 للوصول إلى جميع الميزات المتقدمة</span>
+            </div>
+        </div>
+        
+        <!-- الميزات المدفوعة -->
+        <div class="premium-features">
+            <!-- فحص VPN -->
+            <div class="premium-card">
+                <div class="premium-header">
+                    <div class="card-title" style="color: white; margin: 0;">
+                        <i class="fas fa-user-shield"></i>
+                        <span id="vpn-check-title">فحص اتصال VPN</span>
                     </div>
+                    <div class="badge badge-success">مميز</div>
                 </div>
-                
-                <div class="payment-info">
-                    <i class="fas fa-lock"></i> جميع عمليات الدفع مشفرة وآمنة 100%<br>
-                    بعد الدفع سيتم إيقاف جمع بياناتك تلقائياً
+                <div class="premium-body">
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> <span id="vpn-feature-1">كشف إذا كنت متصلاً بـ VPN أم لا</span></li>
+                        <li><i class="fas fa-check"></i> <span id="vpn-feature-2">فحص تسريبات IP الحقيقية</span></li>
+                        <li><i class="fas fa-check"></i> <span id="vpn-feature-3">اختبار DNS لتسريبات</span></li>
+                        <li><i class="fas fa-check"></i> <span id="vpn-feature-4">فحص WebRTC للتسريبات</span></li>
+                    </ul>
                 </div>
             </div>
             
-            <div class="swipe-hint">
-                <i class="fas fa-arrow-right"></i>
-                اسحب لليمين للعودة إلى صفحة المعلومات
+            <!-- فحوصات المواقع -->
+            <div class="premium-card">
+                <div class="premium-header">
+                    <div class="card-title" style="color: white; margin: 0;">
+                        <i class="fas fa-search"></i>
+                        <span id="site-scan-title">فحوصات المواقع المتقدمة</span>
+                    </div>
+                    <div class="badge badge-success">مميز</div>
+                </div>
+                <div class="premium-body">
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> <span id="site-feature-1">فحص SSL/TLS للمواقع</span></li>
+                        <li><i class="fas fa-check"></i> <span id="site-feature-2">كشف مواقع التصيد الاحتيالي</span></li>
+                        <li><i class="fas fa-check"></i> <span id="site-feature-3">فحص Malware في المواقع</span></li>
+                        <li><i class="fas fa-check"></i> <span id="site-feature-4">تحليل شهادات الأمان</span></li>
+                    </ul>
+                </div>
             </div>
+            
+            <!-- مولد كلمات السر -->
+            <div class="premium-card">
+                <div class="premium-header">
+                    <div class="card-title" style="color: white; margin: 0;">
+                        <i class="fas fa-key"></i>
+                        <span id="password-gen-title">مولد كلمات سر قوية</span>
+                    </div>
+                    <div class="badge badge-success">مميز</div>
+                </div>
+                <div class="premium-body">
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> <span id="pass-feature-1">مولد كلمات سر عشوائية</span></li>
+                        <li><i class="fas fa-check"></i> <span id="pass-feature-2">تخصيص الطول والتعقيد</span></li>
+                        <li><i class="fas fa-check"></i> <span id="pass-feature-3">فحص قوة الكلمات</span></li>
+                        <li><i class="fas fa-check"></i> <span id="pass-feature-4">تشفير وتخزين آمن</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- تشفير المواقع -->
+            <div class="premium-card">
+                <div class="premium-header">
+                    <div class="card-title" style="color: white; margin: 0;">
+                        <i class="fas fa-lock"></i>
+                        <span id="encryption-title">تشفير المواقع والبيانات</span>
+                    </div>
+                    <div class="badge badge-success">مميز</div>
+                </div>
+                <div class="premium-body">
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> <span id="encrypt-feature-1">تشفير HTTPS قسري</span></li>
+                        <li><i class="fas fa-check"></i> <span id="encrypt-feature-2">حظر التتبع والإعلانات</span></li>
+                        <li><i class="fas fa-check"></i> <span id="encrypt-feature-3">تشفير بيانات النماذج</span></li>
+                        <li><i class="fas fa-check"></i> <span id="encrypt-feature-4">حماية من Keyloggers</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- زر الترقية -->
+        <div class="payment-section" style="margin-top: 30px;">
+            <h3 class="payment-title" id="premium-upgrade-title">🚀 ترقية الآن واحصل على كل الميزات</h3>
+            <p class="payment-subtitle" id="premium-upgrade-subtitle">جميع الميزات المتقدمة بخصم 87% - $1 فقط!</p>
+            
+            <div class="payment-buttons">
+                <a href="https://nowpayments.io/payment/?iid=4317957448&source=button" 
+                   target="_blank" rel="noreferrer noopener" 
+                   class="payment-btn cta-button">
+                    <i class="fas fa-shield-alt"></i>
+                    <span id="upgrade-button-1">🛡️ ترقية الآن - $1 فقط</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="hint" id="premium-hint">
+            <i class="fas fa-info-circle"></i>
+            <span id="hint-text">جميع المدفوعات مشفرة وآمنة 100%</span>
         </div>
     </div>
     
-    <!-- مؤشر الصفحات -->
-    <div class="page-indicator">
-        <div class="page-dot active" id="dot1"></div>
-        <div class="page-dot" id="dot2"></div>
-    </div>
-    
-    <!-- نافذة أداة الدفع المضمنة -->
-    <div id="paymentModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.95); z-index: 1000; padding: 20px;">
-        <div style="position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px; background: #1c1c1e; border-radius: 16px; overflow: hidden;">
-            <div style="padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #38383a;">
-                <h3 style="color: white;">بوابة الدفع</h3>
-                <button onclick="closePaymentModal()" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;">×</button>
+    <!-- تبويب الدفع -->
+    <div id="payment-tab" class="tab-content">
+        <!-- قسم الدفع الرئيسي -->
+        <div class="payment-section">
+            <h2 class="payment-title" id="payment-main-title">🚀 الترقية إلى NetInsight Pro</h2>
+            <p class="payment-subtitle" id="payment-main-subtitle">
+                احصل على حماية كاملة، خصوصية مطلقة، وكل الميزات المتقدمة
+            </p>
+            
+            <div class="payment-amount">
+                <div class="amount-label" id="payment-amount-label">سعر الترقية</div>
+                <div class="amount-value">$1</div>
+                <div class="amount-note" id="payment-note">بدلاً من <s>$7.99</s> (وفر 87%)</div>
             </div>
-            <iframe src="https://nowpayments.io/embeds/payment-widget?iid=4909021269" width="100%" height="100%" frameborder="0" scrolling="no" style="overflow-y: hidden;"></iframe>
+            
+            <!-- الميزات السريعة -->
+            <div class="payment-features">
+                <div class="feature-item">
+                    <div class="feature-icon">🛡️</div>
+                    <div class="feature-text" id="feature-1">حماية كاملة</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔒</div>
+                    <div class="feature-text" id="feature-2">خصوصية تامة</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-text" id="feature-3">سرعة قصوى</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">👑</div>
+                    <div class="feature-text" id="feature-4">ميزات متقدمة</div>
+                </div>
+            </div>
+            
+            <!-- أزرار الدفع -->
+            <div class="payment-buttons">
+                <!-- الزر الرئيسي -->
+                <a href="https://nowpayments.io/payment/?iid=4317957448&source=button" 
+                   target="_blank" rel="noreferrer noopener" 
+                   class="payment-btn cta-button">
+                    <i class="fas fa-bolt"></i>
+                    <span id="main-payment-button">💳 ادفع الآن - $1 فقط</span>
+                </a>
+                
+                <!-- زر الدفع البديل -->
+                <a href="https://nowpayments.io/payment/?iid=4909021269&source=button" 
+                   target="_blank" rel="noreferrer noopener" 
+                   class="payment-btn secondary">
+                    <i class="fas fa-shield-alt"></i>
+                    <span id="alt-payment-button">⚡ حماية متقدمة - $1</span>
+                </a>
+                
+                <!-- زر بوابة الدفع -->
+                <a href="https://nowpayments.io/embeds/payment-widget?iid=4909021269" 
+                   target="_blank" rel="noreferrer noopener" 
+                   class="payment-btn">
+                    <i class="fas fa-external-link-alt"></i>
+                    <span id="widget-payment-button">🌐 بوابة الدفع الكاملة</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- شهادات إضافية -->
+        <div class="testimonial">
+            <p class="testimonial-text" id="payment-testimonial">
+                "دفعت $1 وكانت أفضل استثمار في أمني الرقمي. التطبيق يحميني الآن من جميع التهديدات!"
+            </p>
+            <p class="testimonial-author" id="payment-testimonial-author">- محمد التميمي، مبرمج</p>
+        </div>
+        
+        <!-- معلومات الأمان -->
+        <div class="info-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-lock"></i>
+                    <span id="security-info-title">معلومات الأمان</span>
+                </div>
+            </div>
+            <div class="data-grid">
+                <div class="data-item">
+                    <div class="data-label">
+                        <i class="fas fa-shield-alt" style="color: #10b981;"></i>
+                        <span id="security-label-1">جميع المدفوعات مشفرة</span>
+                    </div>
+                    <div class="data-value success">AES-256</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">
+                        <i class="fas fa-user-shield" style="color: #10b981;"></i>
+                        <span id="security-label-2">لا نطلب بيانات شخصية</span>
+                    </div>
+                    <div class="data-value success">آمن 100%</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">
+                        <i class="fas fa-bolt" style="color: #10b981;"></i>
+                        <span id="security-label-3">التفعيل فوري</span>
+                    </div>
+                    <div class="data-value success">خلال ثوانٍ</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="hint">
+            <i class="fas fa-sync-alt"></i>
+            <span id="final-hint">بعد الدفع، سيتم تفعيل جميع الميزات تلقائياً</span>
         </div>
     </div>
+    
+    <!-- الفوتر -->
+    <footer class="app-footer">
+        <div class="footer-links">
+            <a href="#" class="footer-link" id="footer-privacy">سياسة الخصوصية</a>
+            <a href="#" class="footer-link" id="footer-terms">شروط الاستخدام</a>
+            <a href="#" class="footer-link" id="footer-support">الدعم الفني</a>
+            <a href="#" class="footer-link" id="footer-about">حول التطبيق</a>
+        </div>
+        <div class="copyright" id="copyright">
+            © 2024 NetInsight Pro. جميع الحقوق محفوظة.
+        </div>
+    </footer>
     
     <script>
-        // معلومات الجهاز
-        function collectDeviceInfo() {
-            const info = {
-                // معلومات النظام
-                os: navigator.platform || 'غير معروف',
-                browser: navigator.userAgent || 'غير معروف',
-                screen: `${screen.width} × ${screen.height} (${window.devicePixelRatio}x)`,
-                language: navigator.language || 'غير معروف',
+        // بيانات الترجمة
+        const translations = {
+            ar: {
+                // عناصر الصفحة
+                'page-title': 'NetInsight Pro - الحماية الشاملة',
+                'main-title': 'NetInsight Pro',
+                'main-subtitle': 'حماية شاملة لبياناتك وتصفح آمن',
+                'language-text': 'English',
+                
+                // التنقل
+                'tab-scan': 'فحص الجهاز',
+                'tab-premium': 'الميزات المدفوعة',
+                'tab-payment': 'الترقية الآن',
+                
+                // تنبيه الاستعجال
+                'urgency-text': '⚠️ عرض محدود! 87% خصم - ينتهي قريباً',
+                
+                // الإحصائيات
+                'stat-protected-label': 'مستخدم محمي',
+                'stat-conversion-label': 'معدل التحويل',
+                'stat-threats-label': 'تهديد تم منعه',
+                
+                // التنبيهات
+                'alert-title': 'تحذير أمني شديد!',
+                'alert-text': 'تم اكتشاف 12 ثغرة أمنية في نظامك. جهازك غير محمي!',
+                
+                // معلومات الجهاز
+                'device-info-title': 'معلومات جهازك',
+                'security-status': 'غير آمن',
+                'os-label': 'نظام التشغيل',
+                'browser-label': 'المتصفح',
+                'screen-label': 'دقة الشاشة',
+                'language-label': 'اللغة',
                 
                 // البصمة الرقمية
-                browserFingerprint: generateFingerprint(),
-                ip: 'جاري التحميل...',
-                location: 'جاري التحميل...',
-                deviceId: generateDeviceId(),
+                'fingerprint-title': 'البصمة الرقمية',
+                'fingerprint-badge': 'مكشوف',
+                'browser-fingerprint-label': 'بصمة المتصفح',
+                'ip-label': 'عنوان IP',
+                'location-label': 'الموقع التقريبي',
+                'device-id-label': 'معرف الجهاز',
                 
-                // معلومات الشبكة
-                connectionType: navigator.connection ? navigator.connection.effectiveType : 'غير معروف',
-                internetSpeed: navigator.connection ? `${navigator.connection.downlink} Mbps` : 'غير معروف',
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-            };
-            
-            return info;
-        }
-        
-        // توليد بصمة فريدة للمتصفح
-        function generateFingerprint() {
-            const components = [
-                navigator.userAgent,
-                navigator.platform,
-                navigator.language,
-                screen.width + 'x' + screen.height,
-                new Date().getTimezoneOffset()
-            ];
-            
-            let hash = 0;
-            const str = components.join('|');
-            for (let i = 0; i < str.length; i++) {
-                const char = str.charCodeAt(i);
-                hash = ((hash << 5) - hash) + char;
-                hash = hash & hash;
-            }
-            
-            return hash.toString(16).substring(0, 12).toUpperCase();
-        }
-        
-        // توليد معرف جهاز فريد
-        function generateDeviceId() {
-            const components = [
-                navigator.hardwareConcurrency || '4',
-                navigator.deviceMemory || '4',
-                screen.colorDepth || '24'
-            ];
-            
-            let hash = 0;
-            const str = components.join('-');
-            for (let i = 0; i < str.length; i++) {
-                const char = str.charCodeAt(i);
-                hash = ((hash << 5) - hash) + char;
-                hash = hash & hash;
-            }
-            
-            return 'DEV-' + Math.abs(hash).toString(16).substring(0, 8).toUpperCase();
-        }
-        
-        // عرض المعلومات
-        function displayDeviceInfo() {
-            const info = collectDeviceInfo();
-            
-            // تحديث معلومات الجهاز
-            document.getElementById('osInfo').textContent = info.os;
-            document.getElementById('browserInfo').textContent = info.browser.substring(0, 50) + '...';
-            document.getElementById('screenInfo').textContent = info.screen;
-            document.getElementById('languageInfo').textContent = info.language;
-            
-            // تحديث البصمة الرقمية
-            document.getElementById('browserFingerprint').textContent = info.browserFingerprint;
-            document.getElementById('deviceId').textContent = info.deviceId;
-            
-            // تحديث معلومات الشبكة
-            document.getElementById('connectionType').textContent = info.connectionType;
-            document.getElementById('internetSpeed').textContent = info.internetSpeed;
-            document.getElementById('timezone').textContent = info.timezone;
-            
-            // جلب عنوان IP
-            fetch('https://api.ipify.org?format=json')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('ipAddress').textContent = data.ip;
-                    getLocationFromIP(data.ip);
-                })
-                .catch(() => {
-                    document.getElementById('ipAddress').textContent = 'غير متاح';
-                });
-        }
-        
-        // الحصول على الموقع التقريبي من IP
-        function getLocationFromIP(ip) {
-            fetch(`https://ipapi.co/${ip}/json/`)
-                .then(response => response.json())
-                .then(data => {
-                    const location = `${data.city || ''}, ${data.country_name || ''}`;
-                    document.getElementById('locationInfo').textContent = location || 'غير متاح';
-                })
-                .catch(() => {
-                    document.getElementById('locationInfo').textContent = 'غير متاح';
-                });
-        }
-        
-        // التحكم في التبديلات
-        function setupToggles() {
-            const fingerprintToggle = document.getElementById('fingerprintToggle');
-            const networkToggle = document.getElementById('networkToggle');
-            
-            fingerprintToggle.addEventListener('change', function() {
-                const items = document.querySelectorAll('.info-section:nth-child(2) .data-item');
-                items.forEach(item => {
-                    item.style.opacity = this.checked ? '1' : '0.5';
-                });
+                // بيانات الاتصال
+                'connection-title': 'بيانات الاتصال',
+                'connection-badge': 'غير مشفر',
+                'vpn-label': 'اتصال VPN',
+                'connection-type-label': 'نوع الاتصال',
+                'speed-label': 'سرعة الإنترنت',
+                'timezone-label': 'المنطقة الزمنية',
                 
-                showNotification(this.checked ? 
-                    'تم تفعيل جمع البصمة الرقمية' : 
-                    'تم إيقاف جمع البصمة الرقمية'
-                );
+                // الشهادات
+                'testimonial-text': '"NetInsight Pro أنقذ بياناتي من الاختراق! بعد الترقية، جميع ثغراتي الأمنية أُصلحت تلقائياً. أنصح به بشدة!"',
+                'testimonial-author': '- أحمد السيد، محلل أمني',
+                'swipe-hint': 'اسحب لليسار لرؤية الميزات المدفوعة',
+                
+                // صفحة الميزات
+                'premium-alert-title': 'ميزات حصرية للمستخدمين المميزين',
+                'premium-alert-text': 'فقط $1 للوصول إلى جميع الميزات المتقدمة',
+                
+                'vpn-check-title': 'فحص اتصال VPN',
+                'vpn-feature-1': 'كشف إذا كنت متصلاً بـ VPN أم لا',
+                'vpn-feature-2': 'فحص تسريبات IP الحقيقية',
+                'vpn-feature-3': 'اختبار DNS لتسريبات',
+                'vpn-feature-4': 'فحص WebRTC للتسريبات',
+                
+                'site-scan-title': 'فحوصات المواقع المتقدمة',
+                'site-feature-1': 'فحص SSL/TLS للمواقع',
+                'site-feature-2': 'كشف مواقع التصيد الاحتيالي',
+                'site-feature-3': 'فحص Malware في المواقع',
+                'site-feature-4': 'تحليل شهادات الأمان',
+                
+                'password-gen-title': 'مولد كلمات سر قوية',
+                'pass-feature-1': 'مولد كلمات سر عشوائية',
+                'pass-feature-2': 'تخصيص الطول والتعقيد',
+                'pass-feature-3': 'فحص قوة الكلمات',
+                'pass-feature-4': 'تشفير وتخزين آمن',
+                
+                'encryption-title': 'تشفير المواقع والبيانات',
+                'encrypt-feature-1': 'تشفير HTTPS قسري',
+                'encrypt-feature-2': 'حظر التتبع والإعلانات',
+                'encrypt-feature-3': 'تشفير بيانات النماذج',
+                'encrypt-feature-4': 'حماية من Keyloggers',
+                
+                'premium-upgrade-title': '🚀 ترقية الآن واحصل على كل الميزات',
+                'premium-upgrade-subtitle': 'جميع الميزات المتقدمة بخصم 87% - $1 فقط!',
+                'upgrade-button-1': '🛡️ ترقية الآن - $1 فقط',
+                'hint-text': 'جميع المدفوعات مشفرة وآمنة 100%',
+                
+                // صفحة الدفع
+                'payment-main-title': '🚀 الترقية إلى NetInsight Pro',
+                'payment-main-subtitle': 'احصل على حماية كاملة، خصوصية مطلقة، وكل الميزات المتقدمة',
+                'payment-amount-label': 'سعر الترقية',
+                'payment-note': 'بدلاً من <s>$7.99</s> (وفر 87%)',
+                
+                'feature-1': 'حماية كاملة',
+                'feature-2': 'خصوصية تامة',
+                'feature-3': 'سرعة قصوى',
+                'feature-4': 'ميزات متقدمة',
+                
+                'main-payment-button': '💳 ادفع الآن - $1 فقط',
+                'alt-payment-button': '⚡ حماية متقدمة - $1',
+                'widget-payment-button': '🌐 بوابة الدفع الكاملة',
+                
+                'payment-testimonial': '"دفعت $1 وكانت أفضل استثمار في أمني الرقمي. التطبيق يحميني الآن من جميع التهديدات!"',
+                'payment-testimonial-author': '- محمد التميمي، مبرمج',
+                
+                'security-info-title': 'معلومات الأمان',
+                'security-label-1': 'جميع المدفوعات مشفرة',
+                'security-label-2': 'لا نطلب بيانات شخصية',
+                'security-label-3': 'التفعيل فوري',
+                
+                'final-hint': 'بعد الدفع، سيتم تفعيل جميع الميزات تلقائياً',
+                
+                // الفوتر
+                'footer-privacy': 'سياسة الخصوصية',
+                'footer-terms': 'شروط الاستخدام',
+                'footer-support': 'الدعم الفني',
+                'footer-about': 'حول التطبيق',
+                'copyright': '© 2024 NetInsight Pro. جميع الحقوق محفوظة.'
+            },
+            en: {
+                // Page elements
+                'page-title': 'NetInsight Pro - Complete Protection',
+                'main-title': 'NetInsight Pro',
+                'main-subtitle': 'Complete data protection and secure browsing',
+                'language-text': 'العربية',
+                
+                // Navigation
+                'tab-scan': 'Device Scan',
+                'tab-premium': 'Premium Features',
+                'tab-payment': 'Upgrade Now',
+                
+                // Urgency banner
+                'urgency-text': '⚠️ Limited offer! 87% discount - Ends soon',
+                
+                // Statistics
+                'stat-protected-label': 'Protected users',
+                'stat-conversion-label': 'Conversion rate',
+                'stat-threats-label': 'Threats blocked',
+                
+                // Alerts
+                'alert-title': 'Critical Security Alert!',
+                'alert-text': '12 security vulnerabilities detected in your system. Your device is unprotected!',
+                
+                // Device info
+                'device-info-title': 'Your Device Information',
+                'security-status': 'Unsafe',
+                'os-label': 'Operating System',
+                'browser-label': 'Browser',
+                'screen-label': 'Screen Resolution',
+                'language-label': 'Language',
+                
+                // Digital fingerprint
+                'fingerprint-title': 'Digital Fingerprint',
+                'fingerprint-badge': 'Exposed',
+                'browser-fingerprint-label': 'Browser Fingerprint',
+                'ip-label': 'IP Address',
+                'location-label': 'Approximate Location',
+                'device-id-label': 'Device ID',
+                
+                // Connection data
+                'connection-title': 'Connection Data',
+                'connection-badge': 'Unencrypted',
+                'vpn-label': 'VPN Connection',
+                'connection-type-label': 'Connection Type',
+                'speed-label': 'Internet Speed',
+                'timezone-label': 'Timezone',
+                
+                // Testimonials
+                'testimonial-text': '"NetInsight Pro saved my data from being hacked! After upgrading, all my security vulnerabilities were fixed automatically. Highly recommended!"',
+                'testimonial-author': '- Ahmed Al-Sayed, Security Analyst',
+                'swipe-hint': 'Swipe left to see premium features',
+                
+                // Premium features page
+                'premium-alert-title': 'Exclusive features for premium users',
+                'premium-alert-text': 'Only $1 to access all advanced features',
+                
+                'vpn-check-title': 'VPN Connection Check',
+                'vpn-feature-1': 'Detect if you\'re connected to VPN or not',
+                'vpn-feature-2': 'Check for real IP leaks',
+                'vpn-feature-3': 'DNS leak test',
+                'vpn-feature-4': 'WebRTC leak check',
+                
+                'site-scan-title': 'Advanced Website Scans',
+                'site-feature-1': 'SSL/TLS certificate check',
+                'site-feature-2': 'Phishing website detection',
+                'site-feature-3': 'Malware scan for websites',
+                'site-feature-4': 'Security certificate analysis',
+                
+                'password-gen-title': 'Strong Password Generator',
+                'pass-feature-1': 'Random password generator',
+                'pass-feature-2': 'Customize length and complexity',
+                'pass-feature-3': 'Password strength check',
+                'pass-feature-4': 'Secure encryption and storage',
+                
+                'encryption-title': 'Website and Data Encryption',
+                'encrypt-feature-1': 'Forced HTTPS encryption',
+                'encrypt-feature-2': 'Block tracking and ads',
+                'encrypt-feature-3': 'Form data encryption',
+                'encrypt-feature-4': 'Protection from Keyloggers',
+                
+                'premium-upgrade-title': '🚀 Upgrade Now and Get All Features',
+                'premium-upgrade-subtitle': 'All advanced features with 87% discount - Only $1!',
+                'upgrade-button-1': '🛡️ Upgrade Now - Only $1',
+                'hint-text': 'All payments are 100% encrypted and secure',
+                
+                // Payment page
+                'payment-main-title': '🚀 Upgrade to NetInsight Pro',
+                'payment-main-subtitle': 'Get complete protection, absolute privacy, and all advanced features',
+                'payment-amount-label': 'Upgrade Price',
+                'payment-note': 'Instead of <s>$7.99</s> (Save 87%)',
+                
+                'feature-1': 'Complete Protection',
+                'feature-2': 'Absolute Privacy',
+                'feature-3': 'Maximum Speed',
+                'feature-4': 'Advanced Features',
+                
+                'main-payment-button': '💳 Pay Now - Only $1',
+                'alt-payment-button': '⚡ Advanced Protection - $1',
+                'widget-payment-button': '🌐 Complete Payment Portal',
+                
+                'payment-testimonial': '"I paid $1 and it was the best investment in my digital security. The app now protects me from all threats!"',
+                'payment-testimonial-author': '- Mohammed Al-Tamimi, Programmer',
+                
+                'security-info-title': 'Security Information',
+                'security-label-1': 'All payments encrypted',
+                'security-label-2': 'We don\'t ask for personal data',
+                'security-label-3': 'Instant activation',
+                
+                'final-hint': 'After payment, all features will be activated automatically',
+                
+                // Footer
+                'footer-privacy': 'Privacy Policy',
+                'footer-terms': 'Terms of Use',
+                'footer-support': 'Technical Support',
+                'footer-about': 'About the App',
+                'copyright': '© 2024 NetInsight Pro. All rights reserved.'
+            }
+        };
+        
+        // الحالة الحالية
+        let currentLanguage = 'ar';
+        let currentTab = 'scan';
+        
+        // وظيفة تبديل اللغة
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'ar' ? 'en' : 'ar';
+            applyTranslations();
+            
+            // تغيير اتجاه الصفحة
+            document.documentElement.dir = currentLanguage === 'ar' ? 'rtl' : 'ltr';
+            
+            // تحديث نص زر اللغة
+            document.getElementById('language-text').textContent = 
+                currentLanguage === 'ar' ? 'English' : 'العربية';
+        }
+        
+        // تطبيق الترجمات
+        function applyTranslations() {
+            const langData = translations[currentLanguage];
+            
+            // تحديث جميع العناصر
+            Object.keys(langData).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.placeholder = langData[key];
+                    } else {
+                        element.innerHTML = langData[key];
+                    }
+                }
             });
             
-            networkToggle.addEventListener('change', function() {
-                const items = document.querySelectorAll('.info-section:nth-child(3) .data-item');
-                items.forEach(item => {
-                    item.style.opacity = this.checked ? '1' : '0.5';
+            // تحديث الوقت حسب اللغة
+            updateTime();
+        }
+        
+        // تبديل التبويبات
+        function switchTab(tabName) {
+            // إخفاء جميع المحتويات
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // إلغاء تفعيل جميع أزرار التبويب
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // تفعيل التبويب المحدد
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+            currentTab = tabName;
+        }
+        
+        // تحديث الوقت
+        function updateTime() {
+            const now = new Date();
+            let timeString;
+            
+            if (currentLanguage === 'ar') {
+                const options = { hour: '2-digit', minute: '2-digit', hour12: true };
+                timeString = now.toLocaleTimeString('ar-EG', options);
+            } else {
+                const options = { hour: '2-digit', minute: '2-digit', hour12: true };
+                timeString = now.toLocaleTimeString('en-US', options);
+            }
+            
+            document.getElementById('current-time').textContent = timeString;
+        }
+        
+        // تأثيرات خاصة لأزرار الدفع
+        function setupPaymentButtons() {
+            const paymentButtons = document.querySelectorAll('.payment-btn');
+            
+            paymentButtons.forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px) scale(1.02)';
                 });
                 
-                showNotification(this.checked ? 
-                    'تم تفعيل جمع بيانات الاتصال' : 
-                    'تم إيقاف جمع بيانات الاتصال'
-                );
+                btn.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+                
+                btn.addEventListener('click', function(e) {
+                    // تسجيل حدث الدفع (لتتبع التحويلات)
+                    console.log('Payment button clicked:', this.href);
+                    
+                    // إشعار ناجح
+                    showNotification(
+                        currentLanguage === 'ar' 
+                            ? 'جاري التوجيه إلى بوابة الدفع الآمنة...' 
+                            : 'Redirecting to secure payment gateway...'
+                    );
+                });
             });
         }
         
-        // التحكم في الانزلاق بين الصفحات
-        let startX = 0;
-        let currentX = 0;
-        let currentPage = 0;
-        const content = document.getElementById('appContent');
-        
-        function setupSwipe() {
-            content.addEventListener('touchstart', handleTouchStart, { passive: true });
-            content.addEventListener('touchmove', handleTouchMove, { passive: true });
-            content.addEventListener('touchend', handleTouchEnd);
-            
-            content.addEventListener('mousedown', handleMouseStart);
-            content.addEventListener('mousemove', handleMouseMove);
-            content.addEventListener('mouseup', handleMouseEnd);
-        }
-        
-        function handleTouchStart(e) {
-            startX = e.touches[0].clientX;
-            currentX = startX;
-        }
-        
-        function handleTouchMove(e) {
-            currentX = e.touches[0].clientX;
-            const diff = startX - currentX;
-            
-            if (Math.abs(diff) > 50) {
-                e.preventDefault();
-            }
-        }
-        
-        function handleTouchEnd() {
-            const diff = startX - currentX;
-            const threshold = 100;
-            
-            if (Math.abs(diff) > threshold) {
-                if (diff > 0 && currentPage < 1) {
-                    // سحب لليسار
-                    goToPage(1);
-                } else if (diff < 0 && currentPage > 0) {
-                    // سحب لليمين
-                    goToPage(0);
-                }
-            }
-        }
-        
-        function handleMouseStart(e) {
-            startX = e.clientX;
-            currentX = startX;
-            document.addEventListener('mousemove', handleMouseMove);
-            document.addEventListener('mouseup', handleMouseEnd);
-        }
-        
-        function handleMouseMove(e) {
-            currentX = e.clientX;
-        }
-        
-        function handleMouseEnd() {
-            const diff = startX - currentX;
-            const threshold = 100;
-            
-            if (Math.abs(diff) > threshold) {
-                if (diff > 0 && currentPage < 1) {
-                    goToPage(1);
-                } else if (diff < 0 && currentPage > 0) {
-                    goToPage(0);
-                }
-            }
-            
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mouseup', handleMouseEnd);
-        }
-        
-        function goToPage(page) {
-            currentPage = page;
-            const translateX = page * -50;
-            content.style.transform = `translateX(${translateX}%)`;
-            
-            // تحديث المؤشر
-            document.getElementById('dot1').classList.toggle('active', page === 0);
-            document.getElementById('dot2').classList.toggle('active', page === 1);
-        }
-        
-        // عرض أداة الدفع المضمنة
-        function showEmbeddedPayment() {
-            document.getElementById('paymentModal').style.display = 'block';
-            goToPage(1);
-        }
-        
-        function closePaymentModal() {
-            document.getElementById('paymentModal').style.display = 'none';
-        }
-        
-        // عرض الإشعارات
+        // إظهار إشعار
         function showNotification(message) {
-            // إنشاء عنصر الإشعار
+            // إزالة أي إشعارات سابقة
+            const existingNotification = document.querySelector('.custom-notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+            
+            // إنشاء إشعار جديد
             const notification = document.createElement('div');
+            notification.className = 'custom-notification';
             notification.textContent = message;
             notification.style.cssText = `
                 position: fixed;
-                top: 80px;
-                right: 16px;
-                left: 16px;
-                background-color: #0a84ff;
+                top: 100px;
+                right: 20px;
+                left: 20px;
+                background: linear-gradient(135deg, #10b981, #059669);
                 color: white;
                 padding: 16px;
-                border-radius: 14px;
-                z-index: 1000;
+                border-radius: 12px;
+                z-index: 10000;
                 font-weight: 600;
                 text-align: center;
-                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-                animation: slideDown 0.3s ease;
+                box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+                animation: slideIn 0.3s ease;
             `;
             
             document.body.appendChild(notification);
             
             setTimeout(() => {
-                notification.style.animation = 'slideUp 0.3s ease';
+                notification.style.animation = 'slideOut 0.3s ease';
                 setTimeout(() => notification.remove(), 300);
-            }, 2000);
+            }, 3000);
+        }
+        
+        // تأثيرات انزلاق للهاتف
+        function setupSwipe() {
+            let startX = 0;
+            let currentX = 0;
+            
+            document.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+            }, { passive: true });
+            
+            document.addEventListener('touchmove', (e) => {
+                currentX = e.touches[0].clientX;
+            }, { passive: true });
+            
+            document.addEventListener('touchend', () => {
+                const diff = startX - currentX;
+                const threshold = 100;
+                
+                if (Math.abs(diff) > threshold) {
+                    if (diff > 0 && currentTab === 'scan') {
+                        switchTab('premium');
+                    } else if (diff > 0 && currentTab === 'premium') {
+                        switchTab('payment');
+                    } else if (diff < 0 && currentTab === 'payment') {
+                        switchTab('premium');
+                    } else if (diff < 0 && currentTab === 'premium') {
+                        switchTab('scan');
+                    }
+                    
+                    // تحديث أزرار التبويب
+                    document.querySelectorAll('.nav-tab').forEach((btn, index) => {
+                        btn.classList.remove('active');
+                    });
+                    document.querySelectorAll('.nav-tab')[currentTab === 'scan' ? 0 : currentTab === 'premium' ? 1 : 2].classList.add('active');
+                }
+            });
+        }
+        
+        // محاكاة فحص VPN (عشوائية)
+        function simulateVPNCheck() {
+            const isConnected = Math.random() > 0.7; // 30% فرصة أن يكون متصلاً بـ VPN
+            const vpnValue = document.getElementById('vpn-value');
+            
+            if (isConnected) {
+                vpnValue.innerHTML = currentLanguage === 'ar' 
+                    ? '<i class="fas fa-check-circle" style="color: #10b981;"></i> متصل' 
+                    : '<i class="fas fa-check-circle" style="color: #10b981;"></i> Connected';
+                vpnValue.className = 'data-value success';
+            } else {
+                vpnValue.innerHTML = currentLanguage === 'ar' 
+                    ? '<i class="fas fa-times-circle"></i> غير متصل' 
+                    : '<i class="fas fa-times-circle"></i> Not Connected';
+                vpnValue.className = 'data-value danger';
+            }
         }
         
         // عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', function() {
-            displayDeviceInfo();
-            setupToggles();
+            // تطبيق اللغة الافتراضية
+            applyTranslations();
+            
+            // إضافة مستمعي الأحداث
+            document.getElementById('language-switcher').addEventListener('click', toggleLanguage);
+            
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    switchTab(this.dataset.tab);
+                });
+            });
+            
+            // إعداد أزرار الدفع
+            setupPaymentButtons();
+            
+            // إعداد تأثيرات الانزلاق
             setupSwipe();
             
-            // تحديث الوقت
-            function updateTime() {
-                const now = new Date();
-                const timeString = now.toLocaleTimeString('ar-EG', { 
-                    hour: '2-digit', 
-                    minute: '2-digit'
-                });
-                document.querySelector('.status-bar div:nth-child(2)').textContent = timeString;
-            }
+            // محاكاة فحص VPN
+            simulateVPNCheck();
             
+            // تحديث الوقت كل دقيقة
             updateTime();
             setInterval(updateTime, 60000);
             
-            // إضافة تأثيرات
+            // إضافة تأثيرات CSS للرسوم المتحركة
             const style = document.createElement('style');
             style.textContent = `
-                @keyframes slideDown {
+                @keyframes slideIn {
                     from { transform: translateY(-20px); opacity: 0; }
                     to { transform: translateY(0); opacity: 1; }
                 }
-                @keyframes slideUp {
+                @keyframes slideOut {
                     from { transform: translateY(0); opacity: 1; }
                     to { transform: translateY(-20px); opacity: 0; }
                 }
             `;
             document.head.appendChild(style);
+            
+            // تأثيرات نفسية عشوائية
+            setInterval(() => {
+                if (Math.random() > 0.8) {
+                    const stats = ['342,158+', '342,167+', '342,175+', '342,189+'];
+                    const threats = ['12,847', '12,851', '12,856', '12,862'];
+                    
+                    document.getElementById('stat-protected').textContent = 
+                        stats[Math.floor(Math.random() * stats.length)];
+                    document.getElementById('stat-threats').textContent = 
+                        threats[Math.floor(Math.random() * threats.length)];
+                }
+            }, 5000);
+            
+            // رسالة ترحيب أولية
+            setTimeout(() => {
+                showNotification(
+                    currentLanguage === 'ar' 
+                        ? '🔍 جاري فحص جهازك لاكتشاف الثغرات الأمنية...' 
+                        : '🔍 Scanning your device for security vulnerabilities...'
+                );
+            }, 1000);
         });
     </script>
 </body>
