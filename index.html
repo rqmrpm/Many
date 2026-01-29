@@ -3,866 +3,918 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NetInsight Security</title>
+    <title>NetInsight Pro - حماية شاملة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap">
     <style>
+        :root {
+            --primary: #FF4757;      /* أحمر تحفيزي للطوارئ */
+            --secondary: #FF9F43;    /* برتقالي للتحفيز */
+            --success: #10AC84;      /* أخضر للأمان */
+            --info: #2E86DE;         /* أزرق للثقة */
+            --dark: #222F3E;         /* داكن للاحترافية */
+            --light: #F9F9F9;        /* فاتح للخلفية */
+            --warning: #FF9F43;      /* تحذير */
+            --danger: #FF4757;       /* خطر */
+            --gradient-primary: linear-gradient(135deg, #FF4757, #FF9F43);
+            --gradient-success: linear-gradient(135deg, #10AC84, #1DD1A1);
+            --gradient-info: linear-gradient(135deg, #2E86DE, #54A0FF);
+            --shadow: 0 5px 20px rgba(0,0,0,0.15);
+            --shadow-hover: 0 10px 30px rgba(255, 71, 87, 0.25);
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Noto Sans Arabic', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        :root {
-            --primary: #0a84ff;
-            --primary-dark: #0066cc;
-            --success: #34c759;
-            --warning: #ff9500;
-            --danger: #ff3b30;
-            --bg-color: #f2f2f7;
-            --card-color: #ffffff;
-            --text-primary: #1d1d1f;
-            --text-secondary: #8e8e93;
-            --border-color: #c7c7cc;
-            --header-height: 44px;
-            --footer-height: 83px;
-            --safe-area-top: env(safe-area-inset-top, 0px);
-            --safe-area-bottom: env(safe-area-inset-bottom, 0px);
-        }
-        
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #000000;
-                --card-color: #1c1c1e;
-                --text-primary: #f5f5f7;
-                --text-secondary: #98989d;
-                --border-color: #38383a;
-            }
+            font-family: 'Cairo', sans-serif;
         }
         
         body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
+            background: var(--light);
+            color: #333;
             max-width: 500px;
             margin: 0 auto;
-            min-height: 100vh;
-            overflow-x: hidden;
             position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            border-radius: 0;
+            overflow-x: hidden;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
         }
         
-        /* شريط حالة Android */
-        .status-bar {
-            height: calc(var(--safe-area-top) + 24px);
-            background-color: var(--bg-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 16px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-primary);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .status-left, .status-right {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .time {
-            font-weight: 700;
-        }
-        
-        /* الهيدر */
+        /* الهيدر المعدل */
         .app-header {
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: var(--card-color);
-            border-bottom: 1px solid var(--border-color);
+            background: var(--dark);
+            padding: 20px 15px;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .app-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: var(--gradient-primary);
+            opacity: 0.1;
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         .app-title {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 700;
+            margin-bottom: 8px;
+            position: relative;
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            gap: 12px;
         }
         
         .app-title i {
-            color: var(--primary);
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            font-size: 32px;
+            background: var(--gradient-primary);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         
-        .security-badge {
-            background: linear-gradient(135deg, var(--success), #30d158);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        /* المحتوى الرئيسي */
-        .app-content {
-            padding: 16px;
-            padding-bottom: calc(var(--footer-height) + 20px);
-        }
-        
-        /* بطاقة الحماية الرئيسية */
-        .main-security-card {
-            background: linear-gradient(135deg, #0a84ff, #0066cc);
-            color: white;
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 20px rgba(10, 132, 255, 0.2);
-        }
-        
-        .security-status {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        
-        .security-status h2 {
-            font-size: 20px;
-            font-weight: 700;
-        }
-        
-        .security-score {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            width: 70px;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            backdrop-filter: blur(10px);
-        }
-        
-        .score-value {
-            font-size: 24px;
-            font-weight: 800;
-            line-height: 1;
-        }
-        
-        .score-label {
-            font-size: 12px;
-            opacity: 0.9;
-        }
-        
-        .last-scan {
+        .header-tagline {
             font-size: 14px;
             opacity: 0.9;
+            max-width: 80%;
+            margin: 0 auto;
+        }
+        
+        /* شريط التنقل */
+        .nav-tabs {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 10px;
+            background: white;
+            border-bottom: 2px solid var(--light);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         
-        /* بطاقات الميزات */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-        
-        .feature-card {
-            background-color: var(--card-color);
-            border-radius: 16px;
-            padding: 18px;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid var(--border-color);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .feature-card:active {
-            transform: scale(0.98);
-        }
-        
-        .feature-card.warning {
-            border-left: 5px solid var(--warning);
-        }
-        
-        .feature-card.danger {
-            border-left: 5px solid var(--danger);
-        }
-        
-        .feature-card.success {
-            border-left: 5px solid var(--success);
-        }
-        
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-            font-size: 22px;
-        }
-        
-        .feature-card.warning .feature-icon {
-            background-color: rgba(255, 149, 0, 0.1);
-            color: var(--warning);
-        }
-        
-        .feature-card.danger .feature-icon {
-            background-color: rgba(255, 59, 48, 0.1);
-            color: var(--danger);
-        }
-        
-        .feature-card.success .feature-icon {
-            background-color: rgba(52, 199, 89, 0.1);
-            color: var(--success);
-        }
-        
-        .feature-card.primary .feature-icon {
-            background-color: rgba(10, 132, 255, 0.1);
-            color: var(--primary);
-        }
-        
-        .feature-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-        
-        .feature-subtitle {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 12px;
-            line-height: 1.4;
-        }
-        
-        .feature-progress {
-            width: 100%;
-            height: 6px;
-            background-color: rgba(0,0,0,0.05);
-            border-radius: 3px;
-            overflow: hidden;
-            margin-bottom: 8px;
-        }
-        
-        .progress-bar {
-            height: 100%;
-            border-radius: 3px;
-        }
-        
-        .feature-card.warning .progress-bar {
-            background-color: var(--warning);
-            width: 29%;
-        }
-        
-        .feature-card.danger .progress-bar {
-            background-color: var(--danger);
-            width: 76.1%;
-        }
-        
-        .feature-card.success .progress-bar {
-            background-color: var(--success);
-            width: 44%;
-        }
-        
-        .feature-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-        
-        /* بطاقة الدفع */
-        .payment-card {
-            background-color: var(--card-color);
-            border-radius: 16px;
-            padding: 20px;
-            margin-top: 24px;
-            border: 1px solid var(--border-color);
+        .nav-tab {
+            flex: 1;
+            padding: 18px 5px;
             text-align: center;
-        }
-        
-        .payment-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .payment-desc {
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-        
-        /* بطاقة معلومات الجهاز */
-        .device-info-card {
-            background-color: var(--card-color);
-            border-radius: 16px;
-            padding: 20px;
-            margin-top: 20px;
-            border: 1px solid var(--border-color);
-        }
-        
-        .device-info-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-        
-        .info-item {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .info-label {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
-        
-        .info-value {
+            background: none;
+            border: none;
             font-size: 15px;
             font-weight: 600;
-            word-break: break-word;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
         }
         
-        /* الفوتر */
-        .app-footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            max-width: 500px;
-            margin: 0 auto;
-            height: var(--footer-height);
-            background-color: var(--card-color);
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding-bottom: var(--safe-area-bottom);
-            z-index: 100;
-        }
-        
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 0;
-            flex: 1;
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        
-        .nav-item.active {
+        .nav-tab.active {
             color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: linear-gradient(to top, rgba(255, 71, 87, 0.05), transparent);
         }
         
-        .nav-icon {
-            font-size: 22px;
-            margin-bottom: 4px;
+        .nav-tab i {
+            margin-left: 8px;
+            font-size: 18px;
         }
         
-        .nav-label {
-            font-size: 12px;
-            font-weight: 500;
+        /* المحتوى */
+        .tab-content {
+            display: none;
+            padding: 20px;
+            animation: fadeIn 0.5s;
         }
         
-        .scan-button {
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 70px;
-            height: 70px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* بطاقات التحفيز */
+        .motivation-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .motivation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+        }
+        
+        .motivation-card.urgent {
+            border-right: 8px solid var(--danger);
+            background: linear-gradient(to left, rgba(255, 71, 87, 0.05), white);
+        }
+        
+        .motivation-card.warning {
+            border-right: 8px solid var(--warning);
+            background: linear-gradient(to left, rgba(255, 159, 67, 0.05), white);
+        }
+        
+        .motivation-card.success {
+            border-right: 8px solid var(--success);
+            background: linear-gradient(to left, rgba(16, 172, 132, 0.05), white);
+        }
+        
+        .card-icon {
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 28px;
-            box-shadow: 0 8px 20px rgba(10, 132, 255, 0.4);
-            border: 4px solid var(--card-color);
+            margin-bottom: 20px;
         }
         
-        /* تأثيرات التطبيق */
-        .pulse {
-            animation: pulse 2s infinite;
+        .urgent .card-icon {
+            background: rgba(255, 71, 87, 0.1);
+            color: var(--danger);
         }
         
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(10, 132, 255, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(10, 132, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(10, 132, 255, 0); }
+        .warning .card-icon {
+            background: rgba(255, 159, 67, 0.1);
+            color: var(--warning);
         }
         
-        /* التكيف مع النظام */
-        @media (max-width: 380px) {
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
+        .success .card-icon {
+            background: rgba(16, 172, 132, 0.1);
+            color: var(--success);
         }
         
-        .btn {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--dark);
+        }
+        
+        .card-desc {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        
+        /* أزرار الترقية */
+        .upgrade-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: var(--gradient-primary);
             color: white;
             border: none;
-            padding: 16px 24px;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 600;
+            padding: 18px 25px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 700;
             cursor: pointer;
-            text-decoration: none;
-            text-align: center;
             width: 100%;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3);
         }
         
-        .btn:active {
-            transform: scale(0.98);
+        .upgrade-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 20px rgba(255, 71, 87, 0.4);
+        }
+        
+        .upgrade-btn i {
+            font-size: 22px;
+        }
+        
+        /* قسم أداة الدفع */
+        .payment-widget-section {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 30px 0;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        
+        .widget-container {
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid var(--light);
+            margin-top: 15px;
+        }
+        
+        /* الخدمات القابلة للتوسيع */
+        .services-container {
+            margin-top: 30px;
+        }
+        
+        .service-item {
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            border: 1px solid #eee;
+        }
+        
+        .service-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .service-header:hover {
+            background: #f8f9fa;
+        }
+        
+        .service-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .service-price {
+            background: var(--gradient-success);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        .service-content {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+        
+        .service-content.expanded {
+            padding: 0 20px 25px 20px;
+            max-height: 500px;
+        }
+        
+        .service-desc {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .service-features {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+        
+        .service-features li {
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .service-features li i {
+            color: var(--success);
+        }
+        
+        /* أزرار التبرع */
+        .donation-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 25px 0;
+        }
+        
+        .donation-btn {
+            background: white;
+            border: 2px solid var(--info);
+            color: var(--info);
+            padding: 18px 5px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .donation-btn:hover {
+            background: var(--info);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .donation-btn i {
+            font-size: 24px;
+        }
+        
+        .donation-amount {
+            font-size: 22px;
+        }
+        
+        .donation-label {
+            font-size: 13px;
+            opacity: 0.9;
         }
         
         /* شعارات الثقة */
         .trust-badges {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 20px;
             flex-wrap: wrap;
+            margin: 30px 0;
         }
         
         .trust-badge {
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-        
-        .trust-badge i {
-            font-size: 20px;
-            margin-bottom: 5px;
-            color: var(--success);
-        }
-        
-        .security-cert {
-            display: inline-flex;
-            align-items: center;
             gap: 8px;
-            background: rgba(52, 199, 89, 0.1);
+        }
+        
+        .trust-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(16, 172, 132, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
             color: var(--success);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
+        }
+        
+        .trust-text {
+            font-size: 13px;
+            color: #666;
+            text-align: center;
+            max-width: 80px;
+        }
+        
+        /* إشعارات */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            left: 20px;
+            background: var(--gradient-success);
+            color: white;
+            padding: 18px;
+            border-radius: 15px;
             font-weight: 600;
-            margin-top: 15px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 10px 25px rgba(16, 172, 132, 0.3);
+            animation: slideDown 0.5s, fadeOut 0.5s 2.5s;
+            display: none;
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            to { opacity: 0; }
+        }
+        
+        /* التذييل */
+        .app-footer {
+            background: var(--dark);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .footer-text {
+            opacity: 0.8;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        /* تصميم متجاوب */
+        @media (max-width: 480px) {
+            .app-title { font-size: 22px; }
+            .card-title { font-size: 18px; }
+            .upgrade-btn { font-size: 16px; padding: 16px; }
+            .donation-buttons { grid-template-columns: repeat(2, 1fr); }
+            .nav-tab { font-size: 14px; padding: 15px 5px; }
+        }
+        
+        /* تأثيرات نفسية إضافية */
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 71, 87, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
+        }
+        
+        .shake-animation {
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .highlight-text {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
         }
     </style>
 </head>
 <body>
-    <!-- شريط حالة Android -->
-    <div class="status-bar">
-        <div class="status-left">
-            <span class="time" id="current-time">11:30</span>
-        </div>
-        <div class="status-right">
-            <i class="fas fa-signal"></i>
-            <i class="fas fa-wifi"></i>
-            <i class="fas fa-battery-full"></i>
-        </div>
-    </div>
-    
     <!-- الهيدر -->
     <header class="app-header">
         <div class="app-title">
             <i class="fas fa-shield-alt"></i>
-            <span>NetInsight Security</span>
+            <span>NetInsight <span class="highlight-text">PRO</span></span>
         </div>
-        <div class="security-badge">
-            <i class="fas fa-badge-check"></i>
-            <span>PROTECTED</span>
-        </div>
+        <p class="header-tagline">أداة الحماية الشاملة التي يستخدمها أكثر من 500,000 شخص حول العالم! ⚡</p>
     </header>
     
-    <!-- المحتوى الرئيسي -->
-    <main class="app-content">
-        <!-- بطاقة الحماية الرئيسية -->
-        <div class="main-security-card">
-            <div class="security-status">
-                <div>
-                    <h2>حالة أمان الجهاز</h2>
-                    <div class="last-scan">
-                        <i class="fas fa-history"></i>
-                        <span>آخر فحص: منذ 19 يوم</span>
-                    </div>
-                </div>
-                <div class="security-score">
-                    <span class="score-value">85%</span>
-                    <span class="score-label">آمن</span>
-                </div>
-            </div>
-            <p>يحتاج جهازك إلى فحص أمني شامل. قم بالترقية الآن لفحص كامل وتحصين ضد التهديدات.</p>
-        </div>
-        
-        <!-- بطاقات الميزات -->
-        <div class="features-grid">
-            <div class="feature-card warning">
-                <div class="feature-icon">
-                    <i class="fas fa-shield-check"></i>
-                </div>
-                <div class="feature-title">فحص الحماية</div>
-                <div class="feature-subtitle">لم يتم فحص الجهاز لمدة 19 يوم</div>
-                <div class="feature-progress">
-                    <div class="progress-bar"></div>
-                </div>
-                <div class="feature-info">
-                    <span>حالة: تحتاج فحص</span>
-                    <span>عالي الأهمية</span>
-                </div>
-            </div>
-            
-            <div class="feature-card danger">
-                <div class="feature-icon">
-                    <i class="fas fa-broom"></i>
-                </div>
-                <div class="feature-title">المنظف</div>
-                <div class="feature-subtitle">29% من مساحة التخزين</div>
-                <div class="feature-progress">
-                    <div class="progress-bar"></div>
-                </div>
-                <div class="feature-info">
-                    <span>74.2 ج.ب / 256 ج.ب</span>
-                    <span>ممتلئ</span>
-                </div>
-            </div>
-            
-            <div class="feature-card success">
-                <div class="feature-icon">
-                    <i class="fas fa-tachometer-alt"></i>
-                </div>
-                <div class="feature-title">زيادة السرعة</div>
-                <div class="feature-subtitle">اجعل جهازك أسرع بنسبة 25%</div>
-                <div class="feature-progress">
-                    <div class="progress-bar"></div>
-                </div>
-                <div class="feature-info">
-                    <span>الأداء: 75%</span>
-                    <span>+25% ممكن</span>
-                </div>
-            </div>
-            
-            <div class="feature-card primary">
-                <div class="feature-icon">
-                    <i class="fas fa-battery-three-quarters"></i>
-                </div>
-                <div class="feature-title">البطارية</div>
-                <div class="feature-subtitle">44 دق 18 س متبقى</div>
-                <div class="feature-progress">
-                    <div class="progress-bar" style="width: 44%; background-color: var(--primary);"></div>
-                </div>
-                <div class="feature-info">
-                    <span>الحالة: جيدة</span>
-                    <span>44% متبقي</span>
-                </div>
-            </div>
-        </div>
-        
-        <!-- بطاقة معلومات الجهاز -->
-        <div class="device-info-card">
-            <div class="device-info-title">
-                <i class="fas fa-mobile-alt"></i>
-                <span>معلومات الجهاز المتصل</span>
-            </div>
-            <div class="info-grid" id="device-info">
-                <!-- سيتم ملؤها بالجافاسكريبت -->
-            </div>
-            <div class="security-cert">
-                <i class="fas fa-lock"></i>
-                <span>جميع المعلومات مشفرة وتخضع لسياسة الخصوصية</span>
-            </div>
-        </div>
-        
-        <!-- بطاقة الدفع -->
-        <div class="payment-card">
-            <div class="payment-title">
-                <i class="fas fa-crown"></i>
-                <span>الترقية إلى الإصدار Pro</span>
-            </div>
-            <div class="payment-desc">
-                احصل على فحص أمني شامل، تنظيف عميق، زيادة سرعة بنسبة 25%، وإدارة التطبيقات المتقدمة. كل ذلك مقابل $1 فقط!
-            </div>
-            
-            <!-- زر الدفع من NOWPayments -->
-            <a href="https://nowpayments.io/payment/?iid=6018014618&source=button" target="_blank" rel="noreferrer noopener" class="btn" style="margin-bottom: 15px;">
-                <i class="fas fa-bolt"></i> ترقية الآن - $1 فقط
-            </a>
-            
-            <div class="trust-badges">
-                <div class="trust-badge">
-                    <i class="fas fa-lock"></i>
-                    <span>دفع آمن</span>
-                </div>
-                <div class="trust-badge">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>مشفر</span>
-                </div>
-                <div class="trust-badge">
-                    <i class="fas fa-bolt"></i>
-                    <span>سريع</span>
-                </div>
-            </div>
-        </div>
-    </main>
+    <!-- شريط التنقل -->
+    <div class="nav-tabs">
+        <button class="nav-tab active" onclick="switchTab('home')">
+            <i class="fas fa-home"></i>
+            الرئيسية
+        </button>
+        <button class="nav-tab" onclick="switchTab('services')">
+            <i class="fas fa-crown"></i>
+            الخدمات
+        </button>
+        <button class="nav-tab" onclick="switchTab('donate')">
+            <i class="fas fa-heart"></i>
+            تبرع
+        </button>
+    </div>
     
-    <!-- الفوتر -->
-    <footer class="app-footer">
-        <a href="#" class="nav-item active">
-            <div class="nav-icon">
-                <i class="fas fa-home"></i>
+    <!-- تبويب الرئيسية -->
+    <div id="home-tab" class="tab-content active">
+        <!-- بطاقة تحفيزية 1 -->
+        <div class="motivation-card urgent">
+            <div class="card-icon">
+                <i class="fas fa-exclamation-triangle"></i>
             </div>
-            <div class="nav-label">الرئيسية</div>
-        </a>
-        
-        <a href="#" class="nav-item">
-            <div class="nav-icon">
+            <h3 class="card-title">⚠️ تحذير عاجل! جهازك معرض للخطر</h3>
+            <p class="card-desc">كشفنا عن 12 تهديداً أمنياً نشطاً في نظامك! آخر فحص كان منذ 19 يوماً. الهاكرز قد يكونون قد وصلوا بالفعل إلى بياناتك الشخصية.</p>
+            <button class="upgrade-btn pulse-animation" onclick="showPaymentWidget()">
                 <i class="fas fa-shield-alt"></i>
-            </div>
-            <div class="nav-label">الحماية</div>
-        </a>
-        
-        <div class="scan-button pulse" onclick="runSecurityScan()">
-            <i class="fas fa-search"></i>
+                سَـــــــلِّـــحْ جهازك الآن بـ $1 فقط!
+            </button>
         </div>
         
-        <a href="#" class="nav-item">
-            <div class="nav-icon">
-                <i class="fas fa-chart-bar"></i>
+        <!-- بطاقة تحفيزية 2 -->
+        <div class="motivation-card warning">
+            <div class="card-icon">
+                <i class="fas fa-tachometer-alt"></i>
             </div>
-            <div class="nav-label">الأداء</div>
-        </a>
+            <h3 class="card-title">🚀 أبطأ من منافسيك بـ 65%!</h3>
+            <p class="card-desc">متصفحك يعمل بسرعة 35% فقط من قدرته الحقيقية. ترقية واحدة ستجعله أسرع بـ 25% على الأقل. لا تترك الفرصة لغيرك!</p>
+            <button class="upgrade-btn" onclick="showNotification('جاري تحميل أداة التسريع...')">
+                <i class="fas fa-bolt"></i>
+                اضغط لتصبح الأسرع بـ $1
+            </button>
+        </div>
         
-        <a href="#" class="nav-item">
-            <div class="nav-icon">
-                <i class="fas fa-cog"></i>
+        <!-- أداة الدفع -->
+        <div class="payment-widget-section">
+            <h3 style="margin-bottom: 15px; color: var(--dark);">
+                <i class="fas fa-lock"></i> بوابة الدفع الآمنة
+            </h3>
+            <p style="color: #666; margin-bottom: 10px;">اختر طريقة الدفع المفضلة لديك:</p>
+            
+            <div class="widget-container">
+                <iframe src="https://nowpayments.io/embeds/payment-widget?iid=4909021269" width="100%" height="600" frameborder="0" scrolling="no" style="overflow-y: hidden;"></iframe>
             </div>
-            <div class="nav-label">الإعدادات</div>
-        </a>
+            
+            <button class="upgrade-btn" style="margin-top: 20px; background: var(--gradient-success);" onclick="showNotification('شكراً لك! جاري تفعيل الحماية...')">
+                <i class="fas fa-check-circle"></i>
+                ✅ تم الدفع - تفعيل الحماية الآن
+            </button>
+        </div>
+        
+        <!-- بطاقة تحفيزية 3 -->
+        <div class="motivation-card success">
+            <div class="card-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <h3 class="card-title">👑 انضم إلى النخبة المحمية</h3>
+            <p class="card-desc">أكثر من 342,158 شخصاً حول العالم يثقون بنا. كن التالي! حماية كاملة، سرعة خيالية، وهدوء بال بلا منازع.</p>
+            <button class="upgrade-btn" onclick="switchTab('services')">
+                <i class="fas fa-crown"></i>
+                انضم للنخبة - ابدأ من $1
+            </button>
+        </div>
+    </div>
+    
+    <!-- تبويب الخدمات -->
+    <div id="services-tab" class="tab-content">
+        <h2 style="text-align: center; margin-bottom: 25px; color: var(--dark);">
+            <i class="fas fa-crown"></i> خدمات NetInsight المميزة
+        </h2>
+        
+        <div class="services-container">
+            <!-- خدمة 1 -->
+            <div class="service-item">
+                <div class="service-header" onclick="toggleService(1)">
+                    <div class="service-title">
+                        <i class="fas fa-shield-alt" style="color: var(--danger);"></i>
+                        الحماية الشاملة مدى الحياة
+                    </div>
+                    <div class="service-price">$9.99</div>
+                </div>
+                <div class="service-content" id="service-1">
+                    <p class="service-desc">حماية كاملة من الفيروسات، الملفات الخبيثة، برامج التجسس، وهجمات التصيد. تحديثات أمنية تلقائية مدى الحياة.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> حماية من 15 مليون تهديد معروف</li>
+                        <li><i class="fas fa-check"></i> جدار حماية ذكي</li>
+                        <li><i class="fas fa-check"></i> حماية البصمة الإلكترونية</li>
+                        <li><i class="fas fa-check"></i> VPN مجاني بسرعة غير محدودة</li>
+                    </ul>
+                    <button class="upgrade-btn" style="background: var(--gradient-danger);" onclick="showPaymentWidget()">
+                        <i class="fas fa-shopping-cart"></i> اشترِ الحماية الشاملة
+                    </button>
+                </div>
+            </div>
+            
+            <!-- خدمة 2 -->
+            <div class="service-item">
+                <div class="service-header" onclick="toggleService(2)">
+                    <div class="service-title">
+                        <i class="fas fa-bolt" style="color: var(--warning);"></i>
+                        حزمة التسريع الذهبية
+                    </div>
+                    <div class="service-price">$4.99</div>
+                </div>
+                <div class="service-content" id="service-2">
+                    <p class="service-desc">اجعل جهازك يعمل كالجديد! تنظيف عميق، تحسين الذاكرة، تسريع التحميل، وإدارة ذكية للتطبيقات.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> زيادة السرعة بنسبة 65%</li>
+                        <li><i class="fas fa-check"></i> تنظيف 20 جيجابايت من الملفات المؤقتة</li>
+                        <li><i class="fas fa-check"></i> تحسين أداء الألعاب بنسبة 40%</li>
+                        <li><i class="fas fa-check"></i> إطالة عمر البطارية</li>
+                    </ul>
+                    <button class="upgrade-btn" style="background: var(--gradient-warning);" onclick="showNotification('جاري تفعيل حزمة التسريع...')">
+                        <i class="fas fa-rocket"></i> اطلق سرعة جهازك
+                    </button>
+                </div>
+            </div>
+            
+            <!-- خدمة 3 -->
+            <div class="service-item">
+                <div class="service-header" onclick="toggleService(3)">
+                    <div class="service-title">
+                        <i class="fas fa-user-secret" style="color: var(--info);"></i>
+                        الخصوصية المطلقة
+                    </div>
+                    <div class="service-price">$7.99</div>
+                </div>
+                <div class="service-content" id="service-3">
+                    <p class="service-desc">اختفِ من الرادار! منع التتبع، تشفير كامل للبيانات، محو البصمة الرقمية، وإنترنت مجهول المصدر.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> منع 500+ أداة تتبع</li>
+                        <li><i class="fas fa-check"></i> تشفير AES-256 للبيانات</li>
+                        <li><i class="fas fa-check"></i> تغيير IP تلقائي كل ساعة</li>
+                        <li><i class="fas fa-check"></i> حماية كاميرا وميكروفون الجهاز</li>
+                    </ul>
+                    <button class="upgrade-btn" style="background: var(--gradient-info);" onclick="showNotification('جاري تفعيل نظام الخصوصية...')">
+                        <i class="fas fa-user-ninja"></i> اخفِ هويتك الرقمية
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- زر ترقية إضافي -->
+        <button class="upgrade-btn" style="margin-top: 30px;" onclick="showPaymentWidget()">
+            <i class="fas fa-gem"></i>
+            🚀 احصل على جميع الخدمات بخصم 60% - $19.99 فقط!
+        </button>
+    </div>
+    
+    <!-- تبويب التبرع -->
+    <div id="donate-tab" class="tab-content">
+        <div class="motivation-card success">
+            <div class="card-icon">
+                <i class="fas fa-heart"></i>
+            </div>
+            <h3 class="card-title">❤️ ادعم استمرارية الحماية المجانية</h3>
+            <p class="card-desc">NetInsight تحمي الملايين مجاناً. تبرعك يساعدنا على الاستمرار في حماية الأشخاص الذين لا يستطيعون الدفع.</p>
+            
+            <div class="donation-buttons">
+                <button class="donation-btn" onclick="donate(1)">
+                    <i class="fas fa-coffee"></i>
+                    <span class="donation-amount">$1</span>
+                    <span class="donation-label">كوب قهوة</span>
+                </button>
+                
+                <button class="donation-btn" onclick="donate(5)">
+                    <i class="fas fa-hamburger"></i>
+                    <span class="donation-amount">$5</span>
+                    <span class="donation-label">وجبة غداء</span>
+                </button>
+                
+                <button class="donation-btn" onclick="donate(10)">
+                    <i class="fas fa-gift"></i>
+                    <span class="donation-amount">$10</span>
+                    <span class="donation-label">هدية جميلة</span>
+                </button>
+                
+                <button class="donation-btn" onclick="donate(25)">
+                    <i class="fas fa-star"></i>
+                    <span class="donation-amount">$25</span>
+                    <span class="donation-label">بطل الحماية</span>
+                </button>
+                
+                <button class="donation-btn" onclick="donate(50)">
+                    <i class="fas fa-crown"></i>
+                    <span class="donation-amount">$50</span>
+                    <span class="donation-label">أسطورة النخبة</span>
+                </button>
+                
+                <button class="donation-btn" onclick="donate(100)">
+                    <i class="fas fa-heartbeat"></i>
+                    <span class="donation-amount">$100</span>
+                    <span class="donation-label">منقذ الملايين</span>
+                </button>
+            </div>
+            
+            <p style="text-align: center; color: #666; margin: 20px 0; font-size: 14px;">
+                <i class="fas fa-lock"></i> جميع التبرعات مشفرة وآمنة 100%
+            </p>
+        </div>
+        
+        <!-- شعارات الثقة -->
+        <div class="trust-badges">
+            <div class="trust-badge">
+                <div class="trust-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="trust-text">حماية مشفرة</div>
+            </div>
+            
+            <div class="trust-badge">
+                <div class="trust-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div class="trust-text">+500 ألف مستخدم</div>
+            </div>
+            
+            <div class="trust-badge">
+                <div class="trust-icon">
+                    <i class="fas fa-award"></i>
+                </div>
+                <div class="trust-text">جائزة الأمان 2024</div>
+            </div>
+            
+            <div class="trust-badge">
+                <div class="trust-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <div class="trust-text">مشروع خيري</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- إشعار -->
+    <div id="notification" class="notification"></div>
+    
+    <!-- التذييل -->
+    <footer class="app-footer">
+        <p style="font-weight: 700; font-size: 18px;">NetInsight Pro</p>
+        <p class="footer-text">© 2024 حماية رقمية بمعايير عسكرية. جميع الحقوق محفوظة.</p>
+        <p class="footer-text" style="margin-top: 5px;">
+            <i class="fas fa-envelope"></i> support@netinsight.pro | 
+            <i class="fas fa-phone"></i> 24/7 دعم فني
+        </p>
     </footer>
     
     <script>
-        // تحديث الوقت
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('ar-EG', { 
-                hour: '2-digit', 
-                minute: '2-digit',
-                hour12: false 
+        // تبديل التبويبات
+        function switchTab(tabName) {
+            // إخفاء جميع المحتويات
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
             });
-            document.getElementById('current-time').textContent = timeString;
+            
+            // إلغاء تفعيل جميع أزرار التبويب
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // إظهار المحتوى المحدد
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // تفعيل الزر المحدد
+            event.target.classList.add('active');
+            
+            // تأثير اهتزاز
+            event.target.classList.add('shake-animation');
+            setTimeout(() => {
+                event.target.classList.remove('shake-animation');
+            }, 500);
         }
         
-        // تحديث الوقت كل دقيقة
-        updateTime();
-        setInterval(updateTime, 60000);
-        
-        // جمع معلومات الجهاز
-        function collectDeviceInfo() {
-            const info = {
-                "نظام التشغيل": navigator.platform,
-                "المتصفح": navigator.userAgent.split(')')[0] + ')',
-                "الدقة": `${screen.width} × ${screen.height}`,
-                "نسبة البكسل": window.devicePixelRatio,
-                "اللغة": navigator.language || 'غير معروف',
-                "الذاكرة": navigator.deviceMemory ? navigator.deviceMemory + ' جيجابايت' : 'غير معروف',
-                "المعالج": navigator.hardwareConcurrency ? navigator.hardwareConcurrency + ' أنوية' : 'غير معروف',
-                "الاتصال": navigator.onLine ? 'متصل بالإنترنت' : 'غير متصل',
-                "نوع الاتصال": navigator.connection ? navigator.connection.effectiveType : 'غير معروف',
-                "المنطقة الزمنية": Intl.DateTimeFormat().resolvedOptions().timeZone,
-                "الكوكيز": navigator.cookieEnabled ? 'مفعّل' : 'معطّل',
-                "التخزين المحلي": !!window.localStorage ? 'مدعوم' : 'غير مدعوم',
-                "دعم اللمس": 'ontouchstart' in window ? 'مدعوم' : 'غير مدعوم'
-            };
+        // توسيع/طي الخدمات
+        function toggleService(serviceNumber) {
+            const content = document.getElementById('service-' + serviceNumber);
+            const isExpanded = content.classList.contains('expanded');
             
-            return info;
-        }
-        
-        // عرض معلومات الجهاز
-        function displayDeviceInfo() {
-            const deviceInfo = collectDeviceInfo();
-            const infoGrid = document.getElementById('device-info');
-            infoGrid.innerHTML = '';
+            // طي جميع الخدمات أولاً
+            document.querySelectorAll('.service-content').forEach(service => {
+                service.classList.remove('expanded');
+            });
             
-            for (const [key, value] of Object.entries(deviceInfo)) {
-                const infoItem = document.createElement('div');
-                infoItem.className = 'info-item';
-                infoItem.innerHTML = `
-                    <div class="info-label">${key}</div>
-                    <div class="info-value">${value}</div>
-                `;
-                infoGrid.appendChild(infoItem);
+            // إذا لم تكن الخدمة مفتوحة، افتحها
+            if (!isExpanded) {
+                content.classList.add('expanded');
+                
+                // تأثير اهتزاز للبطاقة
+                const card = content.parentElement;
+                card.classList.add('shake-animation');
+                setTimeout(() => {
+                    card.classList.remove('shake-animation');
+                }, 500);
             }
         }
         
-        // تشغيل فحص أمني
-        function runSecurityScan() {
-            const scanButton = document.querySelector('.scan-button');
-            const originalContent = scanButton.innerHTML;
+        // عرض أداة الدفع
+        function showPaymentWidget() {
+            switchTab('home');
             
-            // عرض تحميل
-            scanButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            scanButton.classList.remove('pulse');
-            
-            // محاكاة عملية الفحص
+            // تمرير إلى أداة الدفع
             setTimeout(() => {
-                // إعادة الزر إلى حالته الأصلية
-                scanButton.innerHTML = originalContent;
-                scanButton.classList.add('pulse');
+                const widgetSection = document.querySelector('.payment-widget-section');
+                widgetSection.scrollIntoView({ behavior: 'smooth' });
                 
-                // عرض نتيجة الفحص
-                const securityScore = document.querySelector('.score-value');
-                const securityLabel = document.querySelector('.score-label');
-                const lastScan = document.querySelector('.last-scan span');
-                
-                // تحديث النتيجة
-                securityScore.textContent = '92%';
-                securityLabel.textContent = 'ممتاز';
-                lastScan.textContent = 'آخر فحص: الآن';
-                
-                // تحديث بطاقات الميزات
-                document.querySelectorAll('.feature-card')[0].classList.remove('warning');
-                document.querySelectorAll('.feature-card')[0].classList.add('success');
-                document.querySelectorAll('.feature-card')[0].querySelector('.feature-subtitle').textContent = 'الجهاز مفحص وآمن';
-                document.querySelectorAll('.feature-card')[0].querySelector('.feature-info span:first-child').textContent = 'حالة: آمن';
-                
-                // عرض إشعار
-                showNotification('تم الفحص الأمني بنجاح! الجهاز آمن.', 'success');
-            }, 2000);
+                // تأثير تسليط الضوء
+                widgetSection.style.boxShadow = '0 0 0 3px #FF4757, 0 10px 30px rgba(255, 71, 87, 0.4)';
+                setTimeout(() => {
+                    widgetSection.style.boxShadow = 'var(--shadow)';
+                }, 1500);
+            }, 300);
+            
+            showNotification('🚀 جارٍ تحميل بوابة الدفع الآمنة...');
         }
         
-        // عرض إشعار
-        function showNotification(message, type) {
-            // إنشاء عنصر الإشعار
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
+        // التبرع
+        function donate(amount) {
+            const messages = {
+                1: 'شكراً على قهوتك! ☕ أنت تدعم حماية 10 أشخاص مجاناً.',
+                5: 'وجبة غداء سخية! 🍔 تبرعك يحمي 50 شخصاً من التهديدات الإلكترونية.',
+                10: 'هدية ثمينة! 🎁 أنت بطل اليوم. 100 شخص سيكونون آمنين بفضل كرمك.',
+                25: 'أنت بطل الحماية! 🛡️ 250 شخصاً ينامون بسلام اليوم بفضل تبرعك.',
+                50: 'أسطورة النخبة! 👑 قيادتك تحمي 500 شخص من الهاكرز والمحتالين.',
+                100: 'أنت منقذ الملايين! 💖 تبرعك العظيم سيحمي 1000 شخص للأبد.'
+            };
             
-            // تنسيق الإشعار
-            notification.style.cssText = `
-                position: fixed;
-                top: 80px;
-                right: 16px;
-                left: 16px;
-                background-color: ${type === 'success' ? 'var(--success)' : 'var(--danger)'};
-                color: white;
-                padding: 16px;
-                border-radius: 14px;
-                z-index: 1000;
-                font-weight: 600;
-                text-align: center;
-                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-                animation: slideDown 0.3s ease;
-            `;
+            showNotification(messages[amount] || `شكراً على تبرعك البالغ $${amount}! ❤️`);
             
-            // إضافة رسوم متحركة
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes slideDown {
-                    from { transform: translateY(-20px); opacity: 0; }
-                    to { transform: translateY(0); opacity: 1; }
-                }
-                @keyframes slideUp {
-                    from { transform: translateY(0); opacity: 1; }
-                    to { transform: translateY(-20px); opacity: 0; }
-                }
-            `;
-            document.head.appendChild(style);
-            
-            document.body.appendChild(notification);
-            
-            // إزالة الإشعار بعد 3 ثوانٍ
+            // تأثير اهتزاز للزر
+            event.target.classList.add('shake-animation');
             setTimeout(() => {
-                notification.style.animation = 'slideUp 0.3s ease';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.remove();
-                    }
-                }, 300);
+                event.target.classList.remove('shake-animation');
+            }, 500);
+        }
+        
+        // عرض الإشعارات
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
             }, 3000);
         }
         
-        // تهيئة التطبيق عند التحميل
+        // توليد إشعارات تحفيزية عشوائية
+        const motivationalMessages = [
+            "🔥 342 شخصاً اشتروا الحماية في آخر ساعة! انضم إليهم!",
+            "⚡ آخر نسخة: زيادة سرعة بنسبة 40%! جربها الآن!",
+            "🛡️ 99.7% من المستخدمين يشعرون بأمان أكثر بعد الترقية!",
+            "👑 أنت تستحق الأفضل! حماية احترافية بـ $1 فقط!",
+            "🚨 عرض محدود! خصم 60% على الحزمة الكاملة!"
+        ];
+        
+        // عرض إشعار تحفيزي كل 30 ثانية
+        setInterval(() => {
+            if (Math.random() > 0.7) { // 30% فرصة
+                const randomMessage = motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)];
+                showNotification(randomMessage);
+            }
+        }, 30000);
+        
+        // عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', function() {
-            displayDeviceInfo();
+            // إشعار ترحيبي بعد 2 ثانية
+            setTimeout(() => {
+                showNotification('🚀 مرحباً بك في NetInsight Pro! جهازك تحت الحماية...');
+            }, 2000);
             
-            // إضافة تأثيرات النقر على البطاقات
-            const featureCards = document.querySelectorAll('.feature-card');
-            featureCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    this.style.transform = 'scale(0.98)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 150);
+            // إضافة تأثيرات hover للأزرار
+            const buttons = document.querySelectorAll('.upgrade-btn, .donation-btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px)';
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
                 });
             });
             
-            // تغيير لون النظام حسب الوقت
-            const hour = new Date().getHours();
-            if (hour >= 18 || hour < 6) {
-                document.documentElement.style.setProperty('--bg-color', '#000000');
-                document.documentElement.style.setProperty('--card-color', '#1c1c1e');
-                document.documentElement.style.setProperty('--text-primary', '#f5f5f7');
-            }
+            // تأثيرات للبطاقات
+            const cards = document.querySelectorAll('.motivation-card, .service-item');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
         });
-        
-        // منع التكبير/التصغير بالدبل تاب
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(event) {
-            const now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, false);
     </script>
 </body>
 </html>
