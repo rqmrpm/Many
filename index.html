@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NetInsight Web Scanner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: system-ui,sans-serif; background:#020617; color:#e5e7eb; display:flex; flex-direction:column; align-items:center; padding:20px;}
+    .btn {padding:10px 16px; border-radius:12px; cursor:pointer; background:#38bdf8; color:#020617; font-weight:600; border:none; margin:5px;}
+    .modal {display:none; position:fixed; inset:0; background:rgba(0,0,0,.8); justify-content:center; align-items:center; z-index:999;}
+    .modal-content {background:#111; color:#fff; max-width:500px; width:90%; padding:20px; border-radius:12px;}
+    .close {float:right; cursor:pointer; font-size:20px;}
+    code {display:block; margin:4px 0; word-break:break-all;}
+    .wallet-box {margin:10px 0; background:#1e1e1e; padding:10px; border-radius:8px;}
+    input {padding:7px 10px; border-radius:8px; border:1px solid #555; background:#111; color:#fff; width:100%;}
+  </style>
+</head>
+<body>
+
+<h1>NetInsight Web Scanner</h1>
+<p>فحص سريع للمتصفح والاتصال. للحصول على <b>فحص شامل</b>، اضغط الزر أدناه.</p>
+
+<button class="btn" onclick="openPaymentModal()">🛡️ فحص شامل ($1)</button>
+
+<div id="paymentModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closePaymentModal()">×</span>
+    <h2>فحص الخصوصية والأمان المتقدم</h2>
+    <p>السعر: <b>$1</b> – اختر الشبكة والمحفظة:</p>
+
+    <!-- Wallet 1 -->
+    <div class="wallet-box">
+      <h3>Bitcoin</h3>
+      <code id="btc1">bc1qph4zhg4gqfgtxv88nxqg2944hm098fufh24jyv</code>
+      <button onclick="copyAddr('btc1')">نسخ العنوان</button>
+    </div>
+
+    <div class="wallet-box">
+      <h3>Ethereum / USDT (ERC20)</h3>
+      <code id="eth1">0xad80d6bb79f56ec174c90083cf01bee06a16dfb0</code>
+      <button onclick="copyAddr('eth1')">نسخ العنوان</button>
+    </div>
+
+    <div class="wallet-box">
+      <h3>BNB (Ethereum)</h3>
+      <code id="bnbeth">0xad80d6bb79f56ec174c90083cf01bee06a16dfb0</code>
+      <button onclick="copyAddr('bnbeth')">نسخ العنوان</button>
+    </div>
+
+    <div class="wallet-box">
+      <h3>BNB (BSC)</h3>
+      <code id="bnbbsc">0xad80d6bb79f56ec174c90083cf01bee06a16dfb0</code>
+      <button onclick="copyAddr('bnbbsc')">نسخ العنوان</button>
+    </div>
+
+    <div class="wallet-box">
+      <h3>Solana</h3>
+      <code id="sol">44nvYAhgatp16EMp4JyiNTQ38M6CU6vhiHzXjsRx5UU6</code>
+      <button onclick="copyAddr('sol')">نسخ العنوان</button>
+    </div>
+
+    <div class="wallet-box">
+      <h3>USDT / TRON (TRC20)</h3>
+      <code id="trx">TMLCUTq1XMYnLUaQbCgnA35E7W79Qj4s4x</code>
+      <button onclick="copyAddr('trx')">نسخ العنوان</button>
+    </div>
+
+    <!-- Wallet 2 -->
+    <div class="wallet-box">
+      <h3>USDT / Ethereum (Wallet 2)</h3>
+      <code id="eth2">0xb037605b756dab020b576ef64720b253cb24720a</code>
+      <button onclick="copyAddr('eth2')">نسخ العنوان</button>
+    </div>
+
+    <hr>
+    <h4>بعد الدفع:</h4>
+    <input id="txHash" placeholder="Transaction Hash" />
+    <button class="btn" onclick="unlockScan()">تأكيد وبدء الفحص</button>
+
+    <p style="font-size:12px; opacity:.7;">التحليل تقديري مبني على بيانات المتصفح المتاحة، وليس اختراق فعلي.</p>
+  </div>
+</div>
+
+<script>
+function openPaymentModal() { document.getElementById('paymentModal').style.display='flex'; }
+function closePaymentModal() { document.getElementById('paymentModal').style.display='none'; }
+function copyAddr(id) { navigator.clipboard.writeText(document.getElementById(id).innerText); alert('تم نسخ العنوان'); }
+function unlockScan() {
+  const tx=document.getElementById('txHash').value.trim();
+  if(tx.length<12){alert('أدخل Transaction Hash صحيح'); return;}
+  closePaymentModal();
+  alert('تم التأكيد، يبدأ الفحص الشامل الآن!'); // هنا تضيف دالة الفحص الشامل الحقيقية
+}
+</script>
+
+</body>
+</html>
